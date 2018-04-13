@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Newtonsoft.Json;
@@ -26,36 +27,46 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 	}
 	public class HiglightArea
 	{
-		public int StartPosition { get; set; }
-		public int EndPosition { get; set; }
+		public long StartPosition { get; set; }
+		public long EndPosition { get; set; }
 		public Color Color { get; set; } 
 	}
 	static class SyntaxHighlighter
 	{
 		private static Dictionary<string, SyntaxKeyword> Keywords 
 							= new Dictionary<string, SyntaxKeyword>();
+
 		public static void LoadOrCreate(string filename)
 		{
 			try
 			{
 				if (!File.Exists(filename))
 				{
-					SyntaxKeyword[] keywords =
+					Color typeColor = Color.FromArgb(255, 100, 20, 250);
+					Color keywordColor = Color.FromArgb(255, 0, 0, 100); 
+					Color funcColor = Color.FromArgb(255, 0, 20, 250);
+
+					string[] types = {"int", "float", "vec3", "vec2", "vec4", "mat3", };
+					string[] keywords = {"return", "if", "else", "for", "out", "break", "in", "const", "inout", "sign", "normalize", "clamp", "step", "smoothstep", "mix", "pow", "reflect" };
+					string[] funcs = { "cos", "sin", "fract", "dot", "max", "abs", "length", "floor", "min", "mod", };
+
+					SyntaxKeyword[] syntaxStandarts = 
 					{
-						new SyntaxKeyword(){ Keyword = "int", Color = Color.FromArgb(255, 100, 20, 250)},
-						new SyntaxKeyword(){ Keyword = "float", Color = Color.FromArgb(255, 100, 20, 250)},
-						new SyntaxKeyword(){ Keyword = "return", Color = Color.FromArgb(255, 0, 20, 250)},
-						new SyntaxKeyword(){ Keyword = "if", Color = Color.FromArgb(255, 0, 20, 250)},
-						new SyntaxKeyword(){ Keyword = "else", Color = Color.FromArgb(255, 0, 20, 250)},
-						new SyntaxKeyword(){ Keyword = States.Comment.ToString(), Color = Color.FromArgb(255, 0, 250, 0)},
+						new SyntaxKeyword(){ Keyword = States.Comment.ToString(), Color = Color.FromArgb(255, 0, 120, 0)},
 						new SyntaxKeyword(){ Keyword = States.Symbol.ToString(), Color = Color.FromArgb(255, 100, 100, 120)},
 						new SyntaxKeyword(){ Keyword = States.Digit.ToString(), Color = Color.FromArgb(255, 0, 100, 200)},
-						new SyntaxKeyword(){ Keyword = States.Preprocessor.ToString(), Color = Color.FromArgb(255, 50, 50, 50)},
-						new SyntaxKeyword(){ Keyword = States.Text.ToString(), Color = Color.FromArgb(255, 200, 70, 50)}
+						new SyntaxKeyword(){ Keyword = States.Preprocessor.ToString(), Color = Color.FromArgb(255, 40, 40, 40)},
+						new SyntaxKeyword(){ Keyword = States.Text.ToString(), Color = Color.FromArgb(255, 200, 40, 50)}
 					};
+
+					var syntaxKeywords = syntaxStandarts
+						.Union(keywords.Select(k => new SyntaxKeyword() {Color = keywordColor, Keyword = k}))
+						.Union(types.Select(k => new SyntaxKeyword() {Color = typeColor, Keyword = k}))
+						.Union(funcs.Select(k => new SyntaxKeyword() {Color = funcColor, Keyword = k})).ToArray();
+
 					using (var fileStream = new StreamWriter(filename))
 					{
-						fileStream.WriteLine(JsonConvert.SerializeObject(keywords));
+						fileStream.WriteLine(JsonConvert.SerializeObject(syntaxKeywords));
 					}
 				}
 				else
@@ -77,7 +88,9 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 		}
 		public static IEnumerable<HiglightArea> Parse(string text)
 		{
-			return new StatesMachine().Parse(text, Keywords);
+			//return Task.Run(
+				//() => 
+				return new StatesMachine().Parse(text, Keywords);
 		}
 
 		private class StatesMachine
@@ -98,7 +111,15 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 					{
 						case States.Default:
 						{
-							if (s is '#')
+							if (Char.IsWhiteSpace(s) || Char.IsControl(s))
+								break;
+							else if (Char.IsLetter(s))
+							{
+								buffer = new StringBuilder();
+								buffer.Append(s);
+								State = States.Keyword;
+							}
+							else if (s is '#')
 							{
 								State = States.Preprocessor;
 							}
@@ -110,19 +131,13 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							{
 								State = States.Comment;
 							}
-							else if (Char.IsDigit(s))
-							{
-								State = States.Digit;
-							}
-							else if (Char.IsPunctuation(s) || Char.IsSeparator(s))
+							else if ((Char.IsPunctuation(s) || Char.IsSeparator(s)) && s != '/')
 							{
 								lastState = States.Symbol;
 							}
-							else if (Char.IsLetter(s))
+							else if (Char.IsDigit(s))
 							{
-								buffer = new StringBuilder();
-								buffer.Append(s);
-								State = States.Keyword;
+								State = States.Digit;
 							}
 							startPosition = index;
 							break;
@@ -134,7 +149,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 						}
 						case States.Comment:
 						{
-							if (s is '\n') lastState = States.Comment;
+							if (s is '\n' || s is '\r') lastState = States.Comment;
 							break;
 						}
 						case States.Keyword:
@@ -149,8 +164,9 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 										EndPosition = index,
 										Color = value.Color
 									});
-									State = lastState = States.Default;
 								}
+								State = lastState = States.Default;
+								break;
 							}
 							buffer.Append(s);
 							break;
@@ -163,7 +179,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 						}
 						case States.Preprocessor:
 						{
-							if (s == '\n') lastState = States.Preprocessor;
+							if (s == '\n' || s == '\r') lastState = States.Preprocessor;
 							break;
 						}
 					}
