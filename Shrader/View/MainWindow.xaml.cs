@@ -38,7 +38,8 @@ namespace Shrader.IDE.View
 			//"if int a = 0.0 return 2"
 
 			TextRange documentRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
-            var text = documentRange.Text;
+
+			var text = documentRange.Text;
 	        var cursorPosition = CodeEditSpace.CaretPosition;
 
 	        var higlights = SyntaxHighlighter.Parse(text);
@@ -49,44 +50,23 @@ namespace Shrader.IDE.View
 	        CodeEditSpace.CaretPosition = cursorPosition;
         }
 
-		private static TextPointer GetTextPointAt(TextPointer from, long pos)
-		{
-			TextPointer ret = from;
-			long i = 0;
 
-			while ((i < pos) && (ret != null))
-			{
-				if ((ret.GetPointerContext(LogicalDirection.Backward) == TextPointerContext.Text) ||
-					(ret.GetPointerContext(LogicalDirection.Backward) == TextPointerContext.None))
-					i++;
-
-				if (ret.GetPositionAtOffset(1, LogicalDirection.Forward) == null)
-					return ret;
-
-				ret = ret.GetPositionAtOffset(1, LogicalDirection.Forward);
-			}
-
-			return ret;
-		}
-
-		private void Select(long offset, long length, Color color)
+		private void Select(int offset, int length, Color color)
 		{
 			// Get text selection:
-			TextSelection textRange = CodeEditSpace.Selection;
+			TextRange textRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
 
 			// Get text starting point:
 			TextPointer start = CodeEditSpace.Document.ContentStart;
 
 			// Get begin and end requested:
-			TextPointer startPos = GetTextPointAt(start, offset);
-			TextPointer endPos = GetTextPointAt(start, offset + length);
-
+			TextPointer startPos = start.GetPositionAtOffset(offset, LogicalDirection.Forward);
+			TextPointer endPos = start.GetPositionAtOffset(offset + length, LogicalDirection.Forward);
 			// New selection of text:
 			textRange.Select(startPos, endPos);
 
 			// Apply property to the selection:
 			textRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color));
-		
 			// Return selection text:
 			//return CodeEditSpace.Selection.Text;
 
