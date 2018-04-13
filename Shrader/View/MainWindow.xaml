@@ -16,11 +16,18 @@
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
             <RowDefinition Height="7*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
         <!--#endregion-->
 
+        <Menu Grid.ColumnSpan="2">
+            <MenuItem Header="Run" Command="{Binding RunCommand}"/>
+
+
+        </Menu>
+        
         <!--<WindowsFormsHost Grid.Row="0" Initialized="WindowsFormsHost_Initialized">
             <opentk:GLControl x:Name="RenderCanvas" Load="RenderCanvas_Load" Paint="RenderCanvas_Paint" />
         </WindowsFormsHost>-->
@@ -29,7 +36,7 @@
 
         <TextBlock Grid.Row="1" Text="{Binding ErrorText, Mode=OneWay}"/>
 
-        <TabControl Grid.Column="1" Grid.RowSpan="2">
+        <TabControl Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
             <TabItem>
                 <RichTextBox x:Name="CodeEditSpace"
                               TextChanged="CodeEditSpace_TextChanged" />

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -18,9 +19,14 @@ namespace Shrader.IDE.ViewModel
 
         #endregion
 
+        #region Commands
+        public ICommand RunCommand { get; set; }
+        #endregion
+
         #region Constructor
         public MainWindowViewModel()
         {
+            
         }
 
         #endregion
