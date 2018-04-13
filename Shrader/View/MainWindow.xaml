@@ -21,7 +21,7 @@
         <!--#endregion-->
 
         <toolkit:RichTextBox Grid.Column="1" Grid.RowSpan="2" x:Name="CodeEditSpace"
-                             Text="{Binding Text, Mode=TwoWay}" />
+                             Text="{Binding Text, Mode=TwoWay}" TextChanged="CodeEditSpace_TextChanged" />
         <TextBlock Text="{Binding Text, Mode=OneWay}"></TextBlock>
 
     </Grid>

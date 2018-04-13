@@ -27,5 +27,10 @@ namespace Shrader.IDE.View
 
             DataContext = new MainWindowViewModel();
 		}
+
+        private void CodeEditSpace_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
