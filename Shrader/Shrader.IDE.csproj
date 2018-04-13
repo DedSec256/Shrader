@@ -61,7 +61,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Tools\SyntaxHighlighter\SyntaxHighlighter.cs" />
-    <Compile Include="Tools\SyntaxHighlighter\SyntaxToken.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

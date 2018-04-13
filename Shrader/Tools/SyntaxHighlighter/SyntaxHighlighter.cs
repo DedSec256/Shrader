@@ -90,7 +90,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							{
 								State = States.Digit;
 							}
-								startPosition = index;
+							startPosition = index;
 							break;
 						}
 						case States.Text:
