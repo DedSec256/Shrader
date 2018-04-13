@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Shrader.IDE.Tools.SyntaxHighlighter;
+
+using ShaderBuilder;
 
 namespace Shrader.IDE.View
 {
@@ -21,26 +24,82 @@ namespace Shrader.IDE.View
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public MainWindow()
+        public MainWindow()
 		{
             OpenTK.Toolkit.Init();
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel(RenderCanvas);
+            DataContext = new MainWindowViewModel();
+			SyntaxHighlighter.LoadOrCreate("settings.ini");
 		}
 
         #region Highlight part
 
         private void CodeEditSpace_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextRange documentRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
-            //documentRange.ClearAllProperties();
+			// 0123456789
+			//"if int a = 0.0 return 2"
+
+			TextRange documentRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
             var text = documentRange.Text;
+	        var cursorPosition = CodeEditSpace.CaretPosition;
+
+	        var higlights = SyntaxHighlighter.Parse(text);
+	        foreach (var higlight in higlights)
+	        {
+		        Select(higlight.StartPosition, higlight.EndPosition - higlight.StartPosition, higlight.Color);
+	        }
+	        CodeEditSpace.CaretPosition = cursorPosition;
         }
 
-        #endregion
+		private static TextPointer GetTextPointAt(TextPointer from, long pos)
+		{
+			TextPointer ret = from;
+			long i = 0;
 
-        #region Render part
+			while ((i < pos) && (ret != null))
+			{
+				if ((ret.GetPointerContext(LogicalDirection.Backward) == TextPointerContext.Text) ||
+					(ret.GetPointerContext(LogicalDirection.Backward) == TextPointerContext.None))
+					i++;
+
+				if (ret.GetPositionAtOffset(1, LogicalDirection.Forward) == null)
+					return ret;
+
+				ret = ret.GetPositionAtOffset(1, LogicalDirection.Forward);
+			}
+
+			return ret;
+		}
+
+		private void Select(long offset, long length, Color color)
+		{
+			// Get text selection:
+			TextSelection textRange = CodeEditSpace.Selection;
+
+			// Get text starting point:
+			TextPointer start = CodeEditSpace.Document.ContentStart;
+
+			// Get begin and end requested:
+			TextPointer startPos = GetTextPointAt(start, offset);
+			TextPointer endPos = GetTextPointAt(start, offset + length);
+
+			// New selection of text:
+			textRange.Select(startPos, endPos);
+
+			// Apply property to the selection:
+			textRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color));
+		
+			// Return selection text:
+			//return CodeEditSpace.Selection.Text;
+
+		}
+
+		#endregion
+
+		#region Render part
+
+        ShaderBuilder.ShaderBuilder shaderBuilder;
 
         private void WindowsFormsHost_Initialized(object sender, EventArgs e)
         {
@@ -49,14 +108,15 @@ namespace Shrader.IDE.View
 
         private void RenderCanvas_Load(object sender, EventArgs e)
         {
+            shaderBuilder = new ShaderBuilder.ShaderBuilder();
 
         }
 
         private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-
+            shaderBuilder.Paint(RenderCanvas);
         }
 
-        #endregion
-    }
+		#endregion
+	}
 }
