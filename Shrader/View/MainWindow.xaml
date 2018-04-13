@@ -28,11 +28,8 @@
                     <MenuItem Header="New" Command="{Binding CreateFileCommand}"/>
                     <MenuItem Header="Existing" Command="{Binding AddExistFileCommand}"/>
                 </MenuItem>
-                </MenuItem>
             </MenuItem>
             <MenuItem Header="Run" Command="{Binding RunCommand}"/>
-            
-
         </Menu>
         
         <!--<WindowsFormsHost Grid.Row="0" Initialized="WindowsFormsHost_Initialized">
