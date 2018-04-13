@@ -23,7 +23,8 @@ namespace Shrader.IDE.View
 	{
 		public MainWindow()
 		{
-			InitializeComponent();
+            OpenTK.Toolkit.Init();
+            InitializeComponent();
 
             DataContext = new MainWindowViewModel();
 		}
@@ -41,20 +42,20 @@ namespace Shrader.IDE.View
 
         #region Render part
 
-        //private void WindowsFormsHost_Initialized(object sender, EventArgs e)
-        //{
-        //    RenderCanvas.MakeCurrent();
-        //}
+        private void WindowsFormsHost_Initialized(object sender, EventArgs e)
+        {
+            RenderCanvas.MakeCurrent();
+        }
 
-        //private void RenderCanvas_Load(object sender, EventArgs e)
-        //{
+        private void RenderCanvas_Load(object sender, EventArgs e)
+        {
 
-        //}
+        }
 
-        //private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
-        //{
+        private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+        {
 
-        //}
+        }
 
         #endregion
     }
