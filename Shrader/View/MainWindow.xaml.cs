@@ -28,9 +28,32 @@ namespace Shrader.IDE.View
             DataContext = new MainWindowViewModel();
 		}
 
+        #region Highlight part
+
         private void CodeEditSpace_TextChanged(object sender, TextChangedEventArgs e)
         {
 
         }
+
+        #endregion
+
+        #region Render part
+
+        private void WindowsFormsHost_Initialized(object sender, EventArgs e)
+        {
+            RenderCanvas.MakeCurrent();
+        }
+
+        private void RenderCanvas_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+        {
+
+        }
+
+        #endregion
     }
 }
