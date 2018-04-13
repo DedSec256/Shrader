@@ -12,9 +12,9 @@ namespace Shrader.IDE.ViewModel
 
         #region Properties
         /// <summary>
-        /// Text on RichTextBox
+        /// ErrorText on Render
         /// </summary>
-        public string Text { get; set; }
+        public string ErrorText { get; set; }
 
         #endregion
 

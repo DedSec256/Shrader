@@ -30,6 +30,34 @@ namespace Shrader.IDE.View
 			SyntaxHighlighter.LoadOrCreate("settings.ini");
 		}
 
-       
-	}
+        #region Highlight part
+
+        private void CodeEditSpace_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextRange documentRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
+            //documentRange.ClearAllProperties();
+            var text = documentRange.Text;
+        }
+
+        #endregion
+
+        #region Render part
+
+        //private void WindowsFormsHost_Initialized(object sender, EventArgs e)
+        //{
+        //    RenderCanvas.MakeCurrent();
+        //}
+
+        //private void RenderCanvas_Load(object sender, EventArgs e)
+        //{
+
+        //}
+
+        //private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+        //{
+
+        //}
+
+        #endregion
+    }
 }
