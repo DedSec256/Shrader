@@ -37,9 +37,43 @@ namespace Shrader.IDE.View
 
         private void DynamicTab_TextChangedRichTextBoxEvent(object sender, TextChangedEventArgs e)
         {
-            
+			// 0123456789
+			//"if int a = 0.0 return 2"
+
+			TextRange documentRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
+
+			var text = documentRange.Text;
+	        var cursorPosition = CodeEditSpace.CaretPosition;
+
+	        var higlights = SyntaxHighlighter.Parse(text);
+	        foreach (var higlight in higlights)
+	        {
+		        Select(higlight.StartPosition, higlight.EndPosition - higlight.StartPosition, higlight.Color);
+	        }
+	        CodeEditSpace.CaretPosition = cursorPosition;
         }
 
+
+		private void Select(int offset, int length, Color color)
+		{
+			// Get text selection:
+			TextRange textRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
+
+			// Get text starting point:
+			TextPointer start = CodeEditSpace.Document.ContentStart;
+
+			// Get begin and end requested:
+			TextPointer startPos = start.GetPositionAtOffset(offset, LogicalDirection.Forward);
+			TextPointer endPos = start.GetPositionAtOffset(offset + length, LogicalDirection.Forward);
+			// New selection of text:
+			textRange.Select(startPos, endPos);
+
+			// Apply property to the selection:
+			textRange.ApplyPropertyValue(TextElement.ForegroundProperty, new SolidColorBrush(color));
+			// Return selection text:
+			//return CodeEditSpace.Selection.Text;
+
+		}
 		
 		#endregion
 

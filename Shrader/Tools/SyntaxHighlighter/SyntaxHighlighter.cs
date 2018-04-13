@@ -27,8 +27,8 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 	}
 	public class HiglightArea
 	{
-		public long StartPosition { get; set; }
-		public long EndPosition { get; set; }
+		public int StartPosition { get; set; }
+		public int EndPosition { get; set; }
 		public Color Color { get; set; } 
 	}
 	static class SyntaxHighlighter
@@ -43,7 +43,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 				if (!File.Exists(filename))
 				{
 					Color typeColor = Color.FromArgb(255, 100, 20, 250);
-					Color keywordColor = Color.FromArgb(255, 0, 0, 100); 
+					Color keywordColor = Color.FromArgb(255, 0, 70, 100); 
 					Color funcColor = Color.FromArgb(255, 0, 20, 250);
 
 					string[] types = {"int", "float", "vec3", "vec2", "vec4", "mat3", };
