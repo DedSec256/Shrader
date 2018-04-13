@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 using System.Windows.Media;
 using Newtonsoft.Json;
 
@@ -17,24 +18,32 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 		public int EndPosition { get; set; }
 		public Color Color { get; set; } 
 	}
-	class SyntaxHighlighter
+	static class SyntaxHighlighter
 	{
-		private Dictionary<string, SyntaxKeyword> Keywords 
+		private static Dictionary<string, SyntaxKeyword> Keywords 
 							= new Dictionary<string, SyntaxKeyword>();
-		public void Load(string filename)
+		public static bool Load(string filename)
 		{
-			using (var fileStream = new StreamReader(filename))
+			try
 			{
-				string data = fileStream.ReadToEnd();
-				var syntaxRules = JsonConvert.DeserializeObject<SyntaxKeyword[]>(data);
-
-				foreach (var keyword in syntaxRules)
+				using (var fileStream = new StreamReader(filename))
 				{
-					Keywords.Add(keyword.Keyword, keyword);
+					string data = fileStream.ReadToEnd();
+					var syntaxRules = JsonConvert.DeserializeObject<SyntaxKeyword[]>(data);
+
+					foreach (var keyword in syntaxRules)
+					{
+						Keywords.Add(keyword.Keyword, keyword);
+					}
 				}
+				return true;
+			}
+			catch (IOException)
+			{
+				return false;
 			}
 		}
-		public IEnumerable<HiglightArea> Parse(string text)
+		public static IEnumerable<HiglightArea> Parse(string text)
 		{
 			return new StatesMachine().Parse(text, Keywords);
 		}
@@ -118,7 +127,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 						{
 							StartPosition = startPosition,
 							EndPosition = index,
-							Color = keywords[lastState.ToString()]
+							Color = keywords[lastState.ToString()].Color
 						});
 						State = lastState = States.Default;
 					}
