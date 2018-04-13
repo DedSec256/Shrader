@@ -59,6 +59,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 				Digit, 
 				Keyword, 
 				Default,
+				Symbol,
 				Text, 
 			}
 			public IEnumerable<HiglightArea> Parse(string text, Dictionary<string, SyntaxKeyword> keywords)
@@ -78,17 +79,21 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							{
 								State = States.Preprocessor;
 							}
-							if (s is '\"')
+							else if (s is '\"')
 							{
 								State = States.Text;
 							}
-							if (s == '/' && lastS == '/')
+							else if (s == '/' && lastS == '/')
 							{
 								State = States.Comment;
 							}
-							if (Char.IsDigit(s))
+							else if (Char.IsDigit(s))
 							{
 								State = States.Digit;
+							}
+							else if (Char.IsPunctuation(s) || Char.IsSeparator(s))
+							{
+								lastState = States.Symbol;
 							}
 							startPosition = index;
 							break;
