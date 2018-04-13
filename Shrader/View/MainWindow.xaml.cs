@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Shrader.IDE.Tools.SyntaxHighlighter;
 
 namespace Shrader.IDE.View
 {
@@ -26,11 +27,9 @@ namespace Shrader.IDE.View
 			InitializeComponent();
 
             DataContext = new MainWindowViewModel();
+			SyntaxHighlighter.LoadOrCreate("settings.ini");
 		}
 
-        private void CodeEditSpace_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-    }
+       
+	}
 }
