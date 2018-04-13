@@ -23,8 +23,15 @@
         <!--#endregion-->
 
         <Menu Grid.ColumnSpan="2">
+            <MenuItem Header="Files">
+                <MenuItem Header="Add">
+                    <MenuItem Header="New" Command="{Binding CreateFileCommand}"/>
+                    <MenuItem Header="Existing" Command="{Binding AddExistFileCommand}"/>
+                </MenuItem>
+                </MenuItem>
+            </MenuItem>
             <MenuItem Header="Run" Command="{Binding RunCommand}"/>
-
+            
 
         </Menu>
         
