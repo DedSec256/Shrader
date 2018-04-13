@@ -21,13 +21,20 @@
         </Grid.RowDefinitions>
         <!--#endregion-->
 
-        <WindowsFormsHost Grid.Row="0" Initialized="WindowsFormsHost_Initialized">
+        <!--<WindowsFormsHost Grid.Row="0" Initialized="WindowsFormsHost_Initialized">
             <opentk:GLControl x:Name="RenderCanvas" Load="RenderCanvas_Load" Paint="RenderCanvas_Paint" />
-        </WindowsFormsHost>
+        </WindowsFormsHost>-->
 
-        <toolkit:RichTextBox Grid.Column="1" Grid.RowSpan="2" x:Name="CodeEditSpace"
-                             Text="{Binding Text, Mode=TwoWay}" TextChanged="CodeEditSpace_TextChanged" />
         
+
+        <TextBlock Grid.Row="1" Text="{Binding ErrorText, Mode=OneWay}"/>
+
+        <TabControl Grid.Column="1" Grid.RowSpan="2">
+            <TabItem>
+                <RichTextBox x:Name="CodeEditSpace"
+                              TextChanged="CodeEditSpace_TextChanged" />
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>
