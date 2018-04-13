@@ -31,11 +31,9 @@ namespace Shrader.IDE.View
 
         #region Highlight part
 
-        private void CodeEditSpace_TextChanged(object sender, TextChangedEventArgs e)
+        private void DynamicTab_TextChangedRichTextBoxEvent(object sender, TextChangedEventArgs e)
         {
-            TextRange documentRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
-            //documentRange.ClearAllProperties();
-            var text = documentRange.Text;
+            
         }
 
         #endregion

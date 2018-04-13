@@ -18,12 +18,14 @@ namespace DynamicTab
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class DynamicTab : UserControl
+    public partial class CustomDynamicTab : UserControl
     {
         private List<TabItem> _tabItems;
         private TabItem _tabAdd;
 
-        public DynamicTab()
+        public event EventHandler<TextChangedEventArgs> TextChangedRichTextBoxEvent;
+
+        public CustomDynamicTab()
         {
             try
             {
@@ -58,17 +60,21 @@ namespace DynamicTab
             tab.HeaderTemplate = tabDynamic.FindResource("TabHeader") as DataTemplate;
 
             // add controls to tab item, this case I added just a textbox
-            TextBox txt = new TextBox();
-            txt.Name = "txt";
-
-            tab.Content = txt;
+            var rtb = new RichTextBox();
+            rtb.Name = "rtb";
+            tab.Content = rtb;
+            rtb.TextChanged += Rtb_TextChanged;
 
             // insert tab item right before the last (+) tab item
-            _tabItems.Insert(count - 1, tab);
+            _tabItems.Add(tab);
 
             return tab;
         }
 
+        private void Rtb_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextChangedRichTextBoxEvent?.Invoke(sender, e);
+        }
 
         private void TabDynamic_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

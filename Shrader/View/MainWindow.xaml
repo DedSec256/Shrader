@@ -6,6 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:Shrader"
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:dt="clr-namespace:DynamicTab;assembly=DynamicTab"
         xmlns:opentk="clr-namespace:OpenTK;assembly=OpenTK.GLControl" ResizeMode="CanMinimize"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -32,7 +33,7 @@
             <MenuItem Header="Run" Command="{Binding RunCommand}"/>
         </Menu>
         
-        <WindowsFormsHost Grid.Row="0" Initialized="WindowsFormsHost_Initialized">
+        <WindowsFormsHost Grid.Row="1" Initialized="WindowsFormsHost_Initialized">
             <opentk:GLControl x:Name="RenderCanvas" Load="RenderCanvas_Load" Paint="RenderCanvas_Paint" />
         </WindowsFormsHost>
 
@@ -40,12 +41,8 @@
 
         <TextBlock Grid.Row="1" Text="{Binding ErrorText, Mode=OneWay}"/>
 
-        <TabControl Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
-            <TabItem>
-                <RichTextBox x:Name="CodeEditSpace"
-                              TextChanged="CodeEditSpace_TextChanged" />
-            </TabItem>
-        </TabControl>
+        <dt:CustomDynamicTab Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent"/>
+
 
     </Grid>
 </Window>
