@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Shrader
+namespace Shrader.IDE
 {
 	/// <summary>
 	/// Логика взаимодействия для MainWindow.xaml
