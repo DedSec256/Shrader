@@ -29,7 +29,7 @@ namespace Shrader.IDE.View
             OpenTK.Toolkit.Init();
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel();
+            DataContext = new MainWindowViewModel(RenderCanvas);
 			SyntaxHighlighter.LoadOrCreate("settings.ini");
 		}
 
