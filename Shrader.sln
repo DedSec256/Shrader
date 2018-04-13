@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shrader.IDE", "Shrader\Shrader.IDE.csproj", "{A8353F28-0CA7-424C-986F-8F89A666F99F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShaderBuilder", "ShaderBuilder\ShaderBuilder.csproj", "{8A53F3AD-31E4-46FA-B8A3-7EA4BB890B76}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFDynamicTab", "..\..\..\Downloads\WPFDynamicTab-noexe\WPFDynamicTab\WPFDynamicTab.csproj", "{CC39B872-972E-4E9A-9DB8-D03778301BC9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicTab", "DynamicTab\DynamicTab.csproj", "{F1F9F0F8-7BCC-4652-B4DC-10A0C4002CD8}"
@@ -39,6 +41,10 @@ Global
 		{F1F9F0F8-7BCC-4652-B4DC-10A0C4002CD8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F1F9F0F8-7BCC-4652-B4DC-10A0C4002CD8}.Release|x86.ActiveCfg = Release|Any CPU
 		{F1F9F0F8-7BCC-4652-B4DC-10A0C4002CD8}.Release|x86.Build.0 = Release|Any CPU
+		{8A53F3AD-31E4-46FA-B8A3-7EA4BB890B76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A53F3AD-31E4-46FA-B8A3-7EA4BB890B76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A53F3AD-31E4-46FA-B8A3-7EA4BB890B76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A53F3AD-31E4-46FA-B8A3-7EA4BB890B76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

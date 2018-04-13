@@ -144,6 +144,12 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ShaderBuilder\ShaderBuilder.csproj">
+      <Project>{8a53f3ad-31e4-46fa-b8a3-7ea4bb890b76}</Project>
+      <Name>ShaderBuilder</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\DynamicTab\DynamicTab.csproj">
       <Project>{f1f9f0f8-7bcc-4652-b4dc-10a0c4002cd8}</Project>
       <Name>DynamicTab</Name>
