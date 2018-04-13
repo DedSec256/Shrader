@@ -26,7 +26,7 @@ namespace Shrader.IDE.View
             OpenTK.Toolkit.Init();
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel();
+            DataContext = new MainWindowViewModel(RenderCanvas);
 		}
 
         #region Highlight part

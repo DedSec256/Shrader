@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using OpenTK;
 using Shrader.IDE.ViewModel.Base;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,14 @@ namespace Shrader.IDE.ViewModel
         /// ErrorText on Render
         /// </summary>
         public string ErrorText { get; set; }
-
+        /// <summary>
+        /// Path to file to execute
+        /// </summary>
+        public string FilePath { get; set; } = @"D:\default.glsl";
+        /// <summary>
+        /// Control for rendering
+        /// </summary>
+        public GLControl GLControl { get; set; }
         #endregion
 
         #region Commands
@@ -36,8 +44,10 @@ namespace Shrader.IDE.ViewModel
         #endregion
 
         #region Constructor
-        public MainWindowViewModel()
+        public MainWindowViewModel(GLControl RenderCanvas)
         {
+            GLControl = RenderCanvas;
+
             CreateFileCommand = new RelayCommand((obj) =>
             {
                 var dialog = new SaveFileDialog();
