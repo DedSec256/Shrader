@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace Shrader.IDE.Tools
 {
 	static class UIExtensions
 	{
+		static Dispatcher context = Dispatcher.CurrentDispatcher;
 		public static void LoadHighlightinngs(this System.Windows.Forms.RichTextBox codeEditSpace)
 		{
 			void Select(System.Windows.Forms.RichTextBox codeEdit, int start, int length, Color color)
@@ -16,11 +20,28 @@ namespace Shrader.IDE.Tools
 				codeEdit.Select(start, length);
 				codeEdit.SelectionColor = color;
 			}
-
+			
 			codeEditSpace.Enabled = false;
 
 			int selectionStart = codeEditSpace.SelectionStart;
 
+			var higlights = SyntaxHighlighter.SyntaxHighlighter.Parse(codeEditSpace.Text);
+			/*foreach (var higlight in higlights)
+			{
+				Select(codeEditSpace, higlight.StartPosition,
+					higlight.EndPosition - higlight.StartPosition,
+					higlight.Color);
+			}*/
+			Parallel.ForEach(higlights, higlight =>
+			{
+				context.BeginInvoke(DispatcherPriority.Send, (ThreadStart)delegate ()
+				{
+					Select(codeEditSpace, higlight.StartPosition,
+						higlight.EndPosition - higlight.StartPosition,
+						higlight.Color);
+				}, null);
+			});
+			/*
 			if (codeEditSpace.Lines.Length == 0)
 			{
 				var higlights = SyntaxHighlighter.SyntaxHighlighter.Parse(codeEditSpace.Text);
@@ -41,8 +62,8 @@ namespace Shrader.IDE.Tools
 					foreach (var higlight in higlights)
 					{
 
-						//	writer.WriteLine(
-						//	$"{higlight.Key} - {higlight.Color.A};  {higlight.Color.R}; {higlight.Color.B}; {higlight.Color.G}");
+							//writer.WriteLine(
+						//$"{higlight.Key} - {higlight.Color.A};  {higlight.Color.R}; {higlight.Color.B}; {higlight.Color.G}");
 
 						var startPos = codeEditSpace.GetFirstCharIndexFromLine(i);
 						Select(codeEditSpace, startPos + higlight.StartPosition,
@@ -50,10 +71,12 @@ namespace Shrader.IDE.Tools
 					}
 				}
 				//}
-				codeEditSpace.Select(selectionStart, 0);
-			}
+				*/
+			codeEditSpace.Select(selectionStart, 0);
+			//}
 			codeEditSpace.Enabled = true;
 			codeEditSpace.Focus();
 		}
+
 	}
 }
