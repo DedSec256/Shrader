@@ -13,8 +13,11 @@ using System.Windows.Documents;
 using Shrader.IDE.Compilation;
 using ShaderBuilder.Utils;
 using System;
+using System.Drawing;
 using System.Windows.Forms.Integration;
+using OpenTK.Graphics.OpenGL;
 using Shrader.IDE.Model;
+using Shrader.IDE.Tools.VideoSaver;
 using Shrader.IDE.View;
 
 namespace Shrader.IDE.ViewModel
@@ -55,10 +58,14 @@ namespace Shrader.IDE.ViewModel
         /// Create new gcls file command and add it
         /// </summary>
         public ICommand CreateFileCommand { get; set; }
-        /// <summary>
-        /// Add exist gcls file command
-        /// </summary>
-        public ICommand AddExistFileCommand { get; set; }
+	    /// <summary>
+	    /// Create new mpeg-4 record 
+	    /// </summary>
+		public ICommand RecordCommand { get; set; }
+		/// <summary>
+		/// Add exist gcls file command
+		/// </summary>
+		public ICommand AddExistFileCommand { get; set; }
         /// <summary>
         /// Save file changes command
         /// </summary>
@@ -73,7 +80,7 @@ namespace Shrader.IDE.ViewModel
 
         private const string FILTER = "(*.GLSL)|*.GLSL";
 
-        public MainWindowViewModel(GLControl RenderCanvas, CustomDynamicTab DynamicTab)
+		public MainWindowViewModel(GLControl RenderCanvas, CustomDynamicTab DynamicTab)
         {
             GLControl = RenderCanvas;
 
@@ -129,7 +136,12 @@ namespace Shrader.IDE.ViewModel
                 ErrorText = _logger.GetAllMessage();
             });
 
-            SaveCommand = new RelayCommand((obj) =>
+	        RecordCommand = new RelayCommand((obj) =>
+	        {
+		        VideoShaderRecorder.StartRecord();
+	        });
+
+			SaveCommand = new RelayCommand((obj) =>
             {
                 if (DynamicTab.SelectedItem == null)
                     return;

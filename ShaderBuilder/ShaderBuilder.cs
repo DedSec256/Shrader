@@ -62,7 +62,7 @@ namespace ShaderBuilder
             public void UpdateUniforms()
             {
                 if (UniformTime != -1)
-                    GL.Uniform1(UniformTime, (float)DateTime.Now.Second);
+                    GL.Uniform1(UniformTime, (float)Environment.TickCount / 1000);
             }
 
             public void DeleteUniforms()

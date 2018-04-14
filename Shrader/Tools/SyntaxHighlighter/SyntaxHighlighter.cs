@@ -160,7 +160,6 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							}
 							startPosition = index;
 							buffer = new StringBuilder();
-							buffer.Append(s);
 								break;
 						}
 						case States.InText:
@@ -198,7 +197,6 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							{
 								lastState = buffer.ToString();
 							}
-							else buffer.Append(s);
 							break;
 						}
 						case States.Digit:

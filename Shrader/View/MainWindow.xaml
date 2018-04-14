@@ -37,6 +37,7 @@
             </MenuItem>
             <MenuItem Header="Run" Command="{Binding RunCommand}"/>
             <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}"/>
+            <MenuItem Header="Record" Command="{Binding RecordCommand}"/>
         </Menu>
         
         <WindowsFormsHost Grid.Row="1" Initialized="WindowsFormsHost_Initialized">

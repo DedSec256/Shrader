@@ -1,6 +1,9 @@
 ﻿using Shrader.IDE.Model;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace Shrader.IDE.Compilation
 {
@@ -17,7 +20,7 @@ namespace Shrader.IDE.Compilation
             shaderBuilder.Paint(control);
         }
 
-        public static void RenderShader(IEnumerable<string> namesOfShaderFile, SettingModel model)
+		public static void RenderShader(IEnumerable<string> namesOfShaderFile, SettingModel model)
         {
             using (StreamWriter sr = new StreamWriter(EXECUTE_PATH, false))
             {
