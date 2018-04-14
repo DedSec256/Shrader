@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,8 +21,25 @@ namespace DynamicTab
     /// </summary>
     public partial class CustomDynamicTab : UserControl
     {
-        private List<TabItem> _tabItems;
-        private TabItem _tabAdd;
+
+        #region Custom properties
+        public static readonly DependencyProperty TabItemsProperty = 
+            DependencyProperty.Register("TabItems", typeof(ObservableCollection<TabItem>), typeof(CustomDynamicTab));
+
+
+        public ObservableCollection<TabItem> TabItems
+        {
+            get
+            {
+                return GetValue(TabItemsProperty) as ObservableCollection<TabItem>;
+            }
+            set
+            {
+                SetValue(TabItemsProperty, value);
+            }
+        }
+        #endregion
+
 
         public event EventHandler<TextChangedEventArgs> TextChangedRichTextBoxEvent;
 
@@ -31,14 +49,12 @@ namespace DynamicTab
             {
                 InitializeComponent();
 
-                // initialize tabItem array
-                _tabItems = new List<TabItem>();
-
-                // add first tab
-                this.AddTabItem();
-
                 // bind tab control
-                tabDynamic.DataContext = _tabItems;
+                TabItems = new ObservableCollection<TabItem>();
+                TabItems.CollectionChanged += TabItems_CollectionChanged;
+                tabDynamic.DataContext = TabItems;
+
+                
 
                 tabDynamic.SelectedIndex = 0;
             }
@@ -48,56 +64,24 @@ namespace DynamicTab
             }
         }
 
-        private TabItem AddTabItem()
+        private void TabItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            int count = _tabItems.Count;
-
-            // create new tab item
-            TabItem tab = new TabItem();
-
-            tab.Header = string.Format("Tab {0}", count);
-            tab.Name = string.Format("tab{0}", count);
-            tab.HeaderTemplate = tabDynamic.FindResource("TabHeader") as DataTemplate;
-
-            // add controls to tab item, this case I added just a textbox
-            var rtb = new RichTextBox();
-            rtb.Name = "rtb";
-            tab.Content = rtb;
-            rtb.TextChanged += Rtb_TextChanged;
-
-            // insert tab item right before the last (+) tab item
-            _tabItems.Add(tab);
-
-            return tab;
+            if (e.NewItems == null)
+                return;
+            foreach (var item in e.NewItems)
+            {
+                // add controls to tab item, this case I added just a textbox
+                var rtb = new RichTextBox();
+                rtb.TextChanged += Rtb_TextChanged;
+                var tab = (item as TabItem);
+                tab.HeaderTemplate = tabDynamic.FindResource("TabHeader") as DataTemplate;
+                tab.Content = rtb;
+            }
         }
 
         private void Rtb_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextChangedRichTextBoxEvent?.Invoke(sender, e);
-        }
-
-        private void TabDynamic_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            TabItem tab = tabDynamic.SelectedItem as TabItem;
-            if (tab == null) return;
-
-            if (tab.Equals(_tabAdd))
-            {
-                // clear tab control binding
-                tabDynamic.DataContext = null;
-
-                TabItem newTab = this.AddTabItem();
-
-                // bind tab control
-                tabDynamic.DataContext = _tabItems;
-
-                // select newly added tab item
-                tabDynamic.SelectedItem = newTab;
-            }
-            else
-            {
-                // your code here...
-            }
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
@@ -110,29 +94,14 @@ namespace DynamicTab
 
             if (tab != null)
             {
-                if (_tabItems.Count < 3)
-                {
-                    MessageBox.Show("Cannot remove last tab.");
-                }
-                else if (MessageBox.Show(string.Format("Are you sure you want to remove the tab '{0}'?", tab.Header.ToString()),
+                if (MessageBox.Show(string.Format("Are you sure you want to remove the tab '{0}'?", tab.Header.ToString()),
                     "Remove Tab", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     // get selected tab
                     TabItem selectedTab = tabDynamic.SelectedItem as TabItem;
 
-                    // clear tab control binding
-                    tabDynamic.DataContext = null;
+                    TabItems.Remove(tab);
 
-                    _tabItems.Remove(tab);
-
-                    // bind tab control
-                    tabDynamic.DataContext = _tabItems;
-
-                    // select previously selected tab. if that is removed then select first tab
-                    if (selectedTab == null || selectedTab.Equals(tab))
-                    {
-                        selectedTab = _tabItems[0];
-                    }
                     tabDynamic.SelectedItem = selectedTab;
                 }
             }

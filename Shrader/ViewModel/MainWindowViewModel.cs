@@ -1,11 +1,9 @@
 ﻿using Microsoft.Win32;
 using OpenTK;
 using Shrader.IDE.ViewModel.Base;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Shrader.IDE.ViewModel
@@ -44,18 +42,26 @@ namespace Shrader.IDE.ViewModel
         #endregion
 
         #region Constructor
-        public MainWindowViewModel(GLControl RenderCanvas)
+        public MainWindowViewModel(GLControl RenderCanvas, ObservableCollection<TabItem> tabItems)
         {
             GLControl = RenderCanvas;
 
             CreateFileCommand = new RelayCommand((obj) =>
             {
-                var dialog = new SaveFileDialog();
-                dialog.DefaultExt = ".glsl";
-                dialog.Filter = "(*.GLSL)|*.GLSL";
+                var dialog = new SaveFileDialog
+                {
+                    DefaultExt = ".glsl",
+                    Filter = "(*.GLSL)|*.GLSL"
+                };
                 if (dialog.ShowDialog() == true)
                 {
-                    //TODO: Add tabs create loop
+                    var name = dialog.SafeFileName;
+                    //TODO: Add tab create
+                    tabItems.Add(new TabItem
+                    {
+                        Header = name,
+                        Name = name.Remove(name.IndexOf("."))
+                    });
                 }
             });
 

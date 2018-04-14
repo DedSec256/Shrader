@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid>
-            <TabControl Name="tabDynamic" ItemsSource="{Binding}" SelectionChanged="TabDynamic_SelectionChanged">
+            <TabControl Name="tabDynamic" ItemsSource="{Binding}">
                 <TabControl.Resources>
                     <DataTemplate x:Key="TabHeader" DataType="TabItem">
                         <DockPanel>
