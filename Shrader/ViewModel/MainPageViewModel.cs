@@ -86,6 +86,7 @@ namespace Shrader.IDE.ViewModel
         #region Constructor
 
         private const string FILTER = "(*.GLSL)|*.GLSL";
+        private const string PROJECTFILTER = "(*.SHADEPROJ, *.GLSL)|*.SHADEPROJ;*GLSL";
 
         public MainPageViewModel(GLControl RenderCanvas, CustomDynamicTab DynamicTab)
         {
@@ -109,24 +110,86 @@ namespace Shrader.IDE.ViewModel
             {
                 var dialog = new OpenFileDialog
                 {
-                    Filter = FILTER,
+                    Filter = PROJECTFILTER,
                     CheckFileExists = true,
                     Multiselect = true
                 };
                 if (dialog.ShowDialog() == true)
                 {
-                    foreach (var name in dialog.FileNames)
+                    // Open shadeproj project
+                    if (dialog.FileNames.Count() == 1 && Path.GetExtension(dialog.FileNames[0]) == ".shadeproj")
                     {
-						Dictionary<string, int> solution = new Dictionary<string, int>();
-						StaticShaderLinker.LincRec(name, 0, solution);
-	                    foreach (var source in solution)
-	                    {
-							var tab = AddToTabItems(source.Key);
-		                    if (tab != null)
-		                    {
-			                    FilledTab(tab, source.Key);
-		                    }
-	                    }
+                        try
+                        {
+                            StreamReader sr = new StreamReader(dialog.FileNames[0]);
+                            SettingModel model = new SettingModel();
+                            bool flag, isOk = true;
+
+                            string nameOfSourseFile = sr.ReadLine();
+
+                            isOk &= bool.TryParse(sr.ReadLine(), out flag);
+                            model.IsTime = flag;
+
+                            isOk &= bool.TryParse(sr.ReadLine(), out flag);
+                            model.IsMouse = flag;
+
+                            isOk &= bool.TryParse(sr.ReadLine(), out flag);
+                            model.IsViewPort = flag;
+
+                            sr.Close();
+
+                            if (!isOk)
+                            {
+                                ErrorText += "Failed open .shadeproj file" + Environment.NewLine;
+                                return;
+                            }
+
+                            SettingModel = model;
+                            Dictionary<string, int> solution = new Dictionary<string, int>();
+                            StaticShaderLinker.LincRec(nameOfSourseFile, 0, solution);
+                            foreach (var source in solution)
+                            {
+                                var tab = AddToTabItems(source.Key);
+                                if (tab != null)
+                                    FilledTab(tab, source.Key);
+                            }
+                        }
+                        catch
+                        {
+                            ErrorText += "Failed open .shadeproj file" + Environment.NewLine;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Dictionary<string, int> solution = new Dictionary<string, int>();
+                        foreach (var name in dialog.FileNames)
+                            StaticShaderLinker.LincRec(name, 0, solution);
+                        foreach (var source in solution)
+                        {
+                            var tab = AddToTabItems(source.Key);
+                            if (tab != null)
+                                FilledTab(tab, source.Key);
+                        }
+                    }
+                }
+            });
+
+            SaveCommand = new RelayCommand((obj) =>
+            {
+                var dialog = new SaveFileDialog
+                {
+                    DefaultExt = ".shaderproj",
+                    Filter = "(*.SHADERPROJ)|*.SHADERPROJ"
+                };
+                if (dialog.ShowDialog() == true)
+                {
+                    var name = dialog.FileName;
+                    using (StreamWriter sr = new StreamWriter(name))
+                    {
+                        sr.WriteLine(SettingModel.IsTime);
+                        sr.WriteLine(SettingModel.IsMouse);
+                        sr.WriteLine(SettingModel.IsViewPort);
                     }
                 }
             });
@@ -138,7 +201,6 @@ namespace Shrader.IDE.ViewModel
                 StaticShaderBuilder.StopRender();
 
                 SaveInFiles(TabItems);
-                //StaticShaderBuilder.RenderShader(GetTabFilesPath());
 
                 StaticShaderBuilder.RenderShader(GetTabFilesPath(), SettingModel);
                 StaticShaderBuilder.Paint(RenderCanvas);
