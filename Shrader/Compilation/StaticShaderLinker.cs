@@ -10,7 +10,7 @@ namespace Shrader.IDE.Compilation
 	internal static class StaticShaderLinker
 	{
 		static Logger _logger = Logger.Instance;
-		static readonly Regex Regex = new Regex("#include \"(\\w +.glsl)\"");
+		static readonly Regex Regex = new Regex("#include \"(\\w+.glsl)\"");
 
 		private static void LincRec(string nameOfFile, int level, Dictionary<string, int> links)
 		{
@@ -22,10 +22,10 @@ namespace Shrader.IDE.Compilation
 			using (var fileStream = new StreamReader(file.OpenRead()))
 			{
 				string code = fileStream.ReadToEnd();
-				var result = Regex.Match(code).Groups;
+				var result = Regex.Matches(code);
 
 				foreach (var link in result)
-					LincRec((string) link, level + 1, links);
+					LincRec((link as Match).Groups[1].Value, level + 1, links);
 			}
 		}
 

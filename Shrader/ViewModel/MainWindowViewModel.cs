@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Shrader.IDE.Compilation;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -79,7 +80,7 @@ namespace Shrader.IDE.ViewModel
 
             RunCommand = new RelayCommand((obj) =>
             {
-                // TODO: Add sending of shader files
+                StaticShaderBuilder.RenderShader(new []{ "a.glsl", "b.glsl", "c.glsl", "d.glsl"});
             });
         }
 
