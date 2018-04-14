@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using Newtonsoft.Json;
 
-namespace Shrader.IDE.Tools.SyntaxHighlighter
+namespace DynamicTab.SyntaxHighlighter
 {
 	enum States
 	{
@@ -36,7 +34,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 		public string Key { get; set; }
 	}
 
-	internal static class SyntaxHighlighter
+	public static class SyntaxHighlighter
 	{
 		private static Dictionary<string, SyntaxKeyword> Keywords 
 							= new Dictionary<string, SyntaxKeyword>();
@@ -77,7 +75,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 			Color funcColor = Color.FromArgb(255, 0, 20, 250);
 
 			string[] types = { "bool", "int", "float", "vec3", "vec2", "vec4", "mat3", };
-			string[] keywords = { "void", "return", "if", "else", "for", "out", "break", "in", "const", "inout", "sign", "normalize", "clamp", "step", "smoothstep", "mix", "pow", "reflect", "texture" };
+			string[] keywords = { "uniform", "void", "return", "if", "else", "for", "out", "break", "in", "const", "inout", "sign", "normalize", "clamp", "step", "smoothstep", "mix", "pow", "reflect", "texture" };
 			string[] funcs = { "cos", "sin", "fract", "dot", "max", "abs", "length", "floor", "min", "mod", "log"};
 
 			SyntaxKeyword[] syntaxStandarts =
@@ -225,8 +223,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							{
 								StartPosition = startPosition,
 								EndPosition = index,
-								Color = value.Color,
-								Key = buffer.ToString()
+								Color = value.Color
 							});
 						}
 						_state = States.Default;

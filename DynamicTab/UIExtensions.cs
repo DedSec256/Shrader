@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Threading;
-using DynamicTab.SyntaxHighlighter;
+﻿using System.Drawing;
 
-namespace Shrader.IDE.Tools
+namespace DynamicTab
 {
 	static class UIExtensions
 	{
@@ -25,7 +16,7 @@ namespace Shrader.IDE.Tools
 
 			int selectionStart = codeEditSpace.SelectionStart;
 
-			var higlights = SyntaxHighlighter.Parse(codeEditSpace.Text);
+			var higlights = SyntaxHighlighter.SyntaxHighlighter.Parse(codeEditSpace.Text);
 			foreach (var higlight in higlights)
 			{
 				Select(codeEditSpace, higlight.StartPosition,
