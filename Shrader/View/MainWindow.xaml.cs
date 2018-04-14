@@ -29,7 +29,10 @@ namespace Shrader.IDE.View
             OpenTK.Toolkit.Init();
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel(RenderCanvas, DynamicTab.TabItems);
+            DataContext = new MainWindowViewModel(RenderCanvas, DynamicTab)
+            {
+                TabItems = DynamicTab.TabItems                
+            };
 			SyntaxHighlighter.LoadOrCreate("settings.ini");
 		}
 

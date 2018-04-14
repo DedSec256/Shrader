@@ -5,6 +5,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Linq;
+using DynamicTab;
+using System.ComponentModel;
+using System.IO;
+using System.Windows.Documents;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -24,13 +29,19 @@ namespace Shrader.IDE.ViewModel
         /// Control for rendering
         /// </summary>
         public GLControl GLControl { get; set; }
-        #endregion
-
-        #region Commands
         /// <summary>
-        /// Command for run shaders
+        /// Collection of tabitems
         /// </summary>
-        public ICommand RunCommand { get; set; }
+        public ObservableCollection<TabItem> TabItems { get; set; }
+
+        //public List<string> FilesPath
+    #endregion
+
+    #region Commands
+    /// <summary>
+    /// Command for run shaders
+    /// </summary>
+    public ICommand RunCommand { get; set; }
         /// <summary>
         /// Create new gcls file command and add it
         /// </summary>
@@ -39,10 +50,14 @@ namespace Shrader.IDE.ViewModel
         /// Add exist gcls file command
         /// </summary>
         public ICommand AddExistFileCommand { get; set; }
+        /// <summary>
+        /// Save file changes command
+        /// </summary>
+        public ICommand SaveCommand { get; set; }
         #endregion
 
         #region Constructor
-        public MainWindowViewModel(GLControl RenderCanvas, ObservableCollection<TabItem> tabItems)
+        public MainWindowViewModel(GLControl RenderCanvas, CustomDynamicTab DynamicTab)
         {
             GLControl = RenderCanvas;
 
@@ -55,8 +70,8 @@ namespace Shrader.IDE.ViewModel
                 };
                 if (dialog.ShowDialog() == true)
                 {
-                    var name = dialog.SafeFileName;
-                    tabItems.Add(CreateTabItem(name));
+                    var name = dialog.FileName;
+                    AddToTabItems(name);
                 }
             });
 
@@ -70,9 +85,9 @@ namespace Shrader.IDE.ViewModel
                 };
                 if (dialog.ShowDialog() == true)
                 {
-                    foreach (var name in dialog.SafeFileNames)
+                    foreach (var name in dialog.FileNames)
                     {
-                        tabItems.Add(CreateTabItem(name));
+                        AddToTabItems(name);
                     }
                 }
             });
@@ -81,6 +96,29 @@ namespace Shrader.IDE.ViewModel
             {
                 // TODO: Add sending of shader files
             });
+
+            SaveCommand = new RelayCommand((obj) =>
+            {
+                if (DynamicTab.SelectedItem == null)
+                    return;
+                var tab = DynamicTab.SelectedItem as TabItem;
+                var path = tab.Header.ToString();
+                using (var file = File.Open(path, FileMode.CreateNew))
+                {
+                    using (var writer = new StreamWriter(file))
+                    {
+                        var rtb = tab.Content as RichTextBox;
+                        var text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                        writer.Write(text);
+                    }
+                }                   
+            });
+        }
+
+        private void AddToTabItems(string name)
+        {
+            if (TabItems.FirstOrDefault(t => t.Name == Path.GetFileNameWithoutExtension(name)) != null) return;
+            TabItems.Add(CreateTabItem(name));
         }
 
         private static TabItem CreateTabItem(string name)
@@ -88,7 +126,7 @@ namespace Shrader.IDE.ViewModel
             return new TabItem
             {
                 Header = name,
-                Name = name.Remove(name.IndexOf("."))
+                Name = Path.GetFileNameWithoutExtension(name)                
             };
         }
 

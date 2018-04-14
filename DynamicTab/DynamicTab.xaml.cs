@@ -38,6 +38,9 @@ namespace DynamicTab
                 SetValue(TabItemsProperty, value);
             }
         }
+
+       
+
         #endregion
 
 
@@ -53,8 +56,6 @@ namespace DynamicTab
                 TabItems = new ObservableCollection<TabItem>();
                 TabItems.CollectionChanged += TabItems_CollectionChanged;
                 tabDynamic.DataContext = TabItems;
-
-                
 
                 tabDynamic.SelectedIndex = 0;
             }
@@ -105,6 +106,20 @@ namespace DynamicTab
                     tabDynamic.SelectedItem = selectedTab;
                 }
             }
+        }
+
+        public static readonly DependencyProperty SelectedItemProperty =
+            DependencyProperty.Register("SelectedItem", typeof(object), typeof(CustomDynamicTab));
+
+        public object SelectedItem
+        {
+            get { return GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+
+        private void TabDynamic_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedItem = tabDynamic.SelectedItem;
         }
     }
 }
