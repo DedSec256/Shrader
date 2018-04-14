@@ -178,9 +178,8 @@ namespace ShaderBuilder
             ShaderLoader.DeleteShaders();
             GL.ClearColor(Color.SteelBlue);
 
-            if (uniforms != null)
-                uniforms.DeleteUniforms();
-            canDraw = false;
+	        uniforms?.DeleteUniforms();
+	        canDraw = false;
         }
     }
 }
