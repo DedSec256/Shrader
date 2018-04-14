@@ -17,6 +17,7 @@ using System.Drawing;
 using System.Windows.Forms.Integration;
 using OpenTK.Graphics.OpenGL;
 using Shrader.IDE.Model;
+using Shrader.IDE.Tools;
 using Shrader.IDE.Tools.VideoSaver;
 using Shrader.IDE.View;
 
@@ -170,9 +171,10 @@ namespace Shrader.IDE.ViewModel
                 using (var reader = new StreamReader(file))
                 {
                     rtb.Text = reader.ReadToEnd();
-                }
+	               // rtb.LoadHighlightinngs();
+				}
             }
-        }
+		}
 
         private TabItem AddToTabItems(string name)
         {
