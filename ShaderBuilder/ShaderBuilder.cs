@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
+using ShaderBuilder.Utils;
 
 namespace ShaderBuilder
 {
@@ -34,7 +35,7 @@ namespace ShaderBuilder
         /// </summary>
         private int vertexBuffer = 0;
         #endregion
-
+		private Logger _logger = Logger.Instance;
         /// <summary>
         /// Standart constructor
         /// </summary>
@@ -59,7 +60,7 @@ namespace ShaderBuilder
             int a_Position = GL.GetAttribLocation(program, "a_Position");
             if (a_Position < 0)
             {
-                Logger.AttachOfPosError();
+                _logger.AttachOfPosError();
                 return -1;
             }
 
@@ -78,20 +79,20 @@ namespace ShaderBuilder
             ShaderLoader.LoadShader(nameOfShaderFile, out fShaderSource);
             if (fShaderSource == null)
             {
-                Logger.LoadShaderError();
+                _logger.LoadShaderError();
                 return;
             }
 
             if (!ShaderLoader.InitShaders(fShaderSource, out program))
             {
-                Logger.InitShaderError();
+                _logger.InitShaderError();
                 return;
             }
 
             nVertices = InitVertexBuffers();
             if (nVertices <= 0)
             {
-                Logger.WritePosError();
+                _logger.WritePosError();
                 return;
             }
 

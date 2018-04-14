@@ -95,7 +95,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="StaticShaderBuilder.cs" />
+    <Compile Include="Compilation\StaticShaderBuilder.cs" />
+    <Compile Include="Compilation\StaticShaderLinker.cs" />
     <Compile Include="Tools\SyntaxHighlighter\SyntaxHighlighter.cs" />
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

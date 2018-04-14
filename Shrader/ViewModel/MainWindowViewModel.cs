@@ -10,6 +10,7 @@ using DynamicTab;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Documents;
+using Shrader.IDE.Compilation;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -92,7 +93,7 @@ namespace Shrader.IDE.ViewModel
 
             RunCommand = new RelayCommand((obj) =>
             {
-                // TODO: Add sending of shader files
+                StaticShaderBuilder.RenderShader(new []{ "a.glsl", "b.glsl", "c.glsl", "d.glsl"});
             });
 
             SaveCommand = new RelayCommand((obj) =>

@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL;
 using System.IO;
+using OpenTK.Graphics.OpenGL;
 
-namespace ShaderBuilder
+namespace ShaderBuilder.Utils
 {
     public class ShaderLoader
     {
-        private static int vertexShader = 0, fragmentShader = 0;
+		static Logger _logger = Logger.Instance;
+        private static int _vertexShader = 0, _fragmentShader = 0;
 
         public static bool InitShaders(string fShaderSource, out int program)
         {
@@ -25,7 +22,7 @@ namespace ShaderBuilder
             program = CreateProgram(vShaderSource, fShaderSource);
             if (program == 0)
             {
-                Logger.CreateProgramError();
+                _logger.CreateProgramError();
                 return false;
             }
 
@@ -35,7 +32,7 @@ namespace ShaderBuilder
 
         public static void LoadShader(string shaderFileName, out string shaderSource)
         {
-            Logger.ClearMessages();
+            _logger.ClearMessages();
             shaderSource = null;
 
             using (StreamReader sr = new StreamReader(shaderFileName))
@@ -46,18 +43,18 @@ namespace ShaderBuilder
 
         public static void DeleteShaders()
         {
-            if (vertexShader != 0)
-                GL.DeleteShader(vertexShader);
+            if (_vertexShader != 0)
+                GL.DeleteShader(_vertexShader);
 
-            if (fragmentShader != 0)
-                GL.DeleteShader(fragmentShader);
+            if (_fragmentShader != 0)
+                GL.DeleteShader(_fragmentShader);
         }
 
         private static int CreateProgram(string vShader, string fShader)
         {
-            vertexShader = LoadShader(ShaderType.VertexShader, vShader);
-            fragmentShader = LoadShader(ShaderType.FragmentShader, fShader);
-            if (vertexShader == 0 || fragmentShader == 0)
+            _vertexShader = LoadShader(ShaderType.VertexShader, vShader);
+            _fragmentShader = LoadShader(ShaderType.FragmentShader, fShader);
+            if (_vertexShader == 0 || _fragmentShader == 0)
             {
                 return 0;
             }
@@ -68,8 +65,8 @@ namespace ShaderBuilder
                 return 0;
             }
 
-            GL.AttachShader(program, vertexShader);
-            GL.AttachShader(program, fragmentShader);
+            GL.AttachShader(program, _vertexShader);
+            GL.AttachShader(program, _fragmentShader);
 
             GL.LinkProgram(program);
 
@@ -77,10 +74,10 @@ namespace ShaderBuilder
             GL.GetProgram(program, GetProgramParameterName.LinkStatus, out status);
             if (status == 0)
             {
-                Logger.LinkProgramError(GL.GetProgramInfoLog(program));
+                _logger.LinkProgramError(GL.GetProgramInfoLog(program));
                 GL.DeleteProgram(program);
-                GL.DeleteShader(vertexShader);
-                GL.DeleteShader(fragmentShader);
+                GL.DeleteShader(_vertexShader);
+                GL.DeleteShader(_fragmentShader);
                 return 0;
             }
 
@@ -92,7 +89,7 @@ namespace ShaderBuilder
             int shader = GL.CreateShader(shaderType);
             if (shader == 0)
             {
-                Logger.UnableCreatingError();
+                _logger.UnableCreatingError();
                 return 0;
             }
 
@@ -104,7 +101,7 @@ namespace ShaderBuilder
             GL.GetShader(shader, ShaderParameter.CompileStatus, out status);
             if (status == 0)
             {
-                Logger.CompileShaderError(shaderType, GL.GetShaderInfoLog(shader));
+                _logger.CompileShaderError(shaderType, GL.GetShaderInfoLog(shader));
                 GL.DeleteShader(shader);
                 return 0;
             }

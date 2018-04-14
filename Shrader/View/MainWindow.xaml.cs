@@ -48,6 +48,7 @@ namespace Shrader.IDE.View
 
 			var text = documentRange.Text;
 	        var cursorPosition = CodeEditSpace.CaretPosition;
+			//if int a = 0.0 return 2;
 
 	        var higlights = SyntaxHighlighter.Parse(text);
 	        foreach (var higlight in higlights)
