@@ -1,4 +1,6 @@
-﻿namespace Shrader.IDE.Compilation
+﻿using System.Collections.Generic;
+
+namespace Shrader.IDE.Compilation
 {
     /// <summary>
     /// Static shader builder class
@@ -13,7 +15,7 @@
             shaderBuilder.Paint(control);
         }
 
-        public static void RenderShader(string[] namesOfShaderFile)
+        public static void RenderShader(IEnumerable<string> namesOfShaderFile)
         {
             StaticShaderLinker.LinkSources(namesOfShaderFile, EXECUTE_PATH);
             shaderBuilder.RenderShader(EXECUTE_PATH);

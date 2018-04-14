@@ -100,8 +100,7 @@ namespace Shrader.IDE.ViewModel
                 //SaveInFiles(TabItems)
                 //StaticShaderBuilder.RenderShader(GetTabFilesPath());
 
-                StaticShaderBuilder.RenderShader(new []{ "a.glsl", "b.glsl", "c.glsl", "d.glsl"});
-                StaticShaderBuilder.Paint(RenderCanvas);
+                StaticShaderBuilder.RenderShader(GetTabFilesPath());
                 ErrorText = _logger.GetAllMessage();
             });
 

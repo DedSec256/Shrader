@@ -29,7 +29,7 @@ namespace Shrader.IDE.Compilation
 			}
 		}
 
-		public static void LinkSources(string[] namesOfShaderFile, string endFile)
+		public static void LinkSources(IEnumerable<string> namesOfShaderFile, string endFile)
 		{
 			try
 			{
