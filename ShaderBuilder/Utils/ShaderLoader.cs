@@ -32,7 +32,6 @@ namespace ShaderBuilder.Utils
 
         public static void LoadShader(string shaderFileName, out string shaderSource)
         {
-            _logger.ClearMessages();
             shaderSource = null;
 
             using (StreamReader sr = new StreamReader(shaderFileName))
