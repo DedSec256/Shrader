@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using Newtonsoft.Json;
 
-namespace Shrader.IDE.Tools.SyntaxHighlighter
+namespace DynamicTab.SyntaxHighlighter
 {
 	enum States
 	{
@@ -36,7 +34,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 		public string Key { get; set; }
 	}
 
-	internal static class SyntaxHighlighter
+	public static class SyntaxHighlighter
 	{
 		private static Dictionary<string, SyntaxKeyword> Keywords 
 							= new Dictionary<string, SyntaxKeyword>();

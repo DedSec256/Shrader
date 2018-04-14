@@ -179,7 +179,7 @@ namespace Shrader.IDE.ViewModel
 
             StartRecordCommand = new RelayCommand((obj) =>
             {
-                VideoShaderRecorder.StartRecord();
+                //VideoShaderRecorder.StartRecord();
             });
         }
 

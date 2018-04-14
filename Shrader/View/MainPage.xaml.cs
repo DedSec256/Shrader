@@ -1,5 +1,4 @@
 ﻿using Shrader.IDE.Compilation;
-using Shrader.IDE.Tools.SyntaxHighlighter;
 using Shrader.IDE.ViewModel;
 using System;
 using System.Threading;
@@ -9,6 +8,7 @@ using System.Windows.Media;
 using System.Drawing;
 using System.Windows.Threading;
 using Shrader.IDE.Tools;
+using DynamicTab.SyntaxHighlighter;
 
 namespace Shrader.IDE.View
 {
@@ -17,18 +17,16 @@ namespace Shrader.IDE.View
     /// </summary>
     public partial class MainPage : Page
     {
-        SynchronizationContext context = SynchronizationContext.Current;
         public MainPage()
         {
-            OpenTK.Toolkit.Init();
+	        SyntaxHighlighter.LoadOrCreate("settings.ini");
+			OpenTK.Toolkit.Init();
             InitializeComponent();
 
             DataContext = new MainPageViewModel(RenderCanvas, DynamicTab)
             {
                 TabItems = DynamicTab.TabItems
             };
-            SyntaxHighlighter.LoadOrCreate("settings.ini");
-
         }
 
         #region Highlight part
