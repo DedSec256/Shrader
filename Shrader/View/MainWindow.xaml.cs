@@ -37,8 +37,9 @@ namespace Shrader.IDE.View
 
         private void DynamicTab_TextChangedRichTextBoxEvent(object sender, TextChangedEventArgs e)
         {
-			// 0123456789
-			//"if int a = 0.0 return 2"
+            var CodeEditSpace = sender as RichTextBox;
+            if (CodeEditSpace == null)
+                return;
 
 			TextRange documentRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
 
@@ -48,13 +49,13 @@ namespace Shrader.IDE.View
 	        var higlights = SyntaxHighlighter.Parse(text);
 	        foreach (var higlight in higlights)
 	        {
-		        Select(higlight.StartPosition, higlight.EndPosition - higlight.StartPosition, higlight.Color);
+		        Select(CodeEditSpace, higlight.StartPosition, higlight.EndPosition - higlight.StartPosition, higlight.Color);
 	        }
 	        CodeEditSpace.CaretPosition = cursorPosition;
         }
 
 
-		private void Select(int offset, int length, Color color)
+		private void Select(RichTextBox CodeEditSpace, int offset, int length, Color color)
 		{
 			// Get text selection:
 			TextRange textRange = new TextRange(CodeEditSpace.Document.ContentStart, CodeEditSpace.Document.ContentEnd);
