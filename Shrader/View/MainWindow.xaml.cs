@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Shrader.IDE.Tools.SyntaxHighlighter;
 
-using ShaderBuilder;
+using Shrader.IDE.Compilation;
 
 namespace Shrader.IDE.View
 {
@@ -107,8 +107,6 @@ namespace Shrader.IDE.View
 
 		#region Render part
 
-		ShaderBuilder.ShaderBuilder shaderBuilder;
-
         private void WindowsFormsHost_Initialized(object sender, EventArgs e)
         {
             RenderCanvas.MakeCurrent();
@@ -116,13 +114,11 @@ namespace Shrader.IDE.View
 
         private void RenderCanvas_Load(object sender, EventArgs e)
         {
-            shaderBuilder = new ShaderBuilder.ShaderBuilder();
-
         }
 
         private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-            shaderBuilder.Paint(RenderCanvas);
+            StaticShaderBuilder.Paint(RenderCanvas);
         }
 
 		#endregion
