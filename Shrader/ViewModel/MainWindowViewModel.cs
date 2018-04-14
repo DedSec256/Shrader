@@ -70,6 +70,11 @@ namespace Shrader.IDE.ViewModel
                     //TODO: Add tabs create loop
                 }
             });
+
+            RunCommand = new RelayCommand((obj) =>
+            {
+                // TODO: Add sending of shader files
+            });
         }
 
         #endregion
