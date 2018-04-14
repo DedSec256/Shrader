@@ -3,57 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:local="clr-namespace:Shrader"
-        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:dt="clr-namespace:DynamicTab;assembly=DynamicTab"
-        xmlns:opentk="clr-namespace:OpenTK;assembly=OpenTK.GLControl" ResizeMode="CanMinimize"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:converters="clr-namespace:Shrader.IDE.ValueConverters"
         mc:Ignorable="d"
+        ResizeMode="CanMinimize"                      
         Title="Shrader" WindowStartupLocation="CenterScreen" WindowState="Maximized">
-    <Window.InputBindings>
-        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveCommand}"/>
-        <KeyBinding Key="C" Modifiers="Shift+Ctrl"  Command="{Binding CreateFileCommand}"/>
-    </Window.InputBindings>
+
+
     <Grid>
-        <!--#region Grid Definition-->
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="5*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.4*"/>
-            <RowDefinition Height="7*"/>
-            <RowDefinition Height="3*"/>
-        </Grid.RowDefinitions>
-        <!--#endregion-->
-
-        <Menu Grid.ColumnSpan="2">
-            <MenuItem Header="Files">
-                <MenuItem Header="Add">
-                    <MenuItem Header="New" Command="{Binding CreateFileCommand}"/>
-                    <MenuItem Header="Existing" Command="{Binding AddExistFileCommand}"/>
-                </MenuItem>
-            </MenuItem>
-            <MenuItem Header="Start" Command="{Binding RunCommand}"/>
-            <MenuItem Header="Stop" Command="{Binding StopCommand}"/>
-            <MenuItem Header="Pause" Click="MenuItem_PauseClick"/>
-            <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}"/>
-        </Menu>
-        
-        <WindowsFormsHost Grid.Row="1" Initialized="WindowsFormsHost_Initialized">
-            <opentk:GLControl x:Name="RenderCanvas" Load="RenderCanvas_Load" Paint="RenderCanvas_Paint" />
-        </WindowsFormsHost>
-
-
-
-        <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}" FontStyle="Normal" FontFamily="Consolas" FontSize="14"/>
-
-        <dt:CustomDynamicTab x:Name="DynamicTab" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
-                             TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent"
-                             FontStyle="Normal" FontFamily="Consolas" FontSize="14">
-        </dt:CustomDynamicTab>
-
-
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Content="{Binding CurrentPage, Converter={converters:ApplicationPageValueConverter}}" />
     </Grid>
 </Controls:MetroWindow>
