@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Shrader.IDE.Compile;
-
-namespace Shrader.IDE
+﻿namespace Shrader.IDE.Compilation
 {
     /// <summary>
     /// Static shader builder class
