@@ -103,8 +103,13 @@ namespace Shrader.IDE.ViewModel
                 {
                     foreach (var name in dialog.FileNames)
                     {
-                        var tab = AddToTabItems(name);
-                        FilledTab(tab, name);
+						Dictionary<string, int> solution = new Dictionary<string, int>();
+						StaticShaderLinker.LincRec(name, 0, solution);
+	                    foreach (var source in solution)
+	                    {
+							var tab = AddToTabItems(source.Key);
+		                    FilledTab(tab, source.Key);
+						}
                     }
                 }
             });

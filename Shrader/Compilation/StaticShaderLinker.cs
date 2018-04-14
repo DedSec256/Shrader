@@ -12,7 +12,7 @@ namespace Shrader.IDE.Compilation
 		static Logger _logger = Logger.Instance;
 		static readonly Regex Regex = new Regex("#include \"([\\W|\\w]+?\\.glsl)\"");
 
-		private static void LincRec(string nameOfFile, int level, Dictionary<string, int> links)
+		public static void LincRec(string nameOfFile, int level, Dictionary<string, int> links)
 		{
 			if (links.ContainsKey(nameOfFile))
 				return;

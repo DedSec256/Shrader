@@ -42,55 +42,51 @@ namespace Shrader.IDE.View
 
         #region Highlight part
 
-		public bool isChecked = false;
-        private void DynamicTab_TextChangedRichTextBoxEvent(object sender, EventArgs e)
-        {
-	        var codeEditSpace = sender as System.Windows.Forms.RichTextBox;
-            if (codeEditSpace == null)
-                return;
+		private void DynamicTab_TextChangedRichTextBoxEvent(object sender, EventArgs e)
+		{
+			var codeEditSpace = sender as System.Windows.Forms.RichTextBox;
+			if (codeEditSpace == null)
+				return;
 
-	        int selectionStart = codeEditSpace.SelectionStart;
-	        int selectionLength = codeEditSpace.SelectionLength;
+			int selectionStart = codeEditSpace.SelectionStart;
+			int selectionLength = codeEditSpace.SelectionLength;
 
 			if (codeEditSpace.Lines.Length == 0)
-	        {
-		        var higlights = SyntaxHighlighter.Parse(codeEditSpace.Text);
-		        foreach (var higlight in higlights)
-		        {
+			{
+				var higlights = SyntaxHighlighter.Parse(codeEditSpace.Text);
+				foreach (var higlight in higlights)
+				{
 					Select(codeEditSpace, higlight.StartPosition,
 						higlight.EndPosition - higlight.StartPosition,
 						higlight.Color);
-		        }
-	        }
-	        else
-	        {
-		      //  Parallel.For(0, codeEditSpace.Lines.Length, i =>
-		      // {
-		        for (int i = 0; i < codeEditSpace.Lines.Length; i++)
-		        {
-			        // context.Post(state =>
-			        // {
-			        var higlights = SyntaxHighlighter.Parse(codeEditSpace.Lines[i]);
-			        foreach (var higlight in higlights)
-			        {
-				        var startPos = codeEditSpace.GetFirstCharIndexFromLine(i);
-				        Select(codeEditSpace, startPos + higlight.StartPosition,
-					        higlight.EndPosition - higlight.StartPosition, higlight.Color);
-			        }
-			        //}, null);
-		        }
-	        //});
-	        }
-			codeEditSpace.SelectionStart = selectionStart;
-	        codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
-			codeEditSpace.SelectionLength = selectionLength;
-
-        }
+				}
+			}
+			else
+			{
+				// Parallel.For(0, codeEditSpace.Lines.Length, i =>
+				// {
+				for (int i = 0; i < codeEditSpace.Lines.Length; i++)
+				{
+					// context.Send(state =>
+					// {
+					var higlights = SyntaxHighlighter.Parse(codeEditSpace.Lines[i]);
+					foreach (var higlight in higlights)
+					{
+						var startPos = codeEditSpace.GetFirstCharIndexFromLine(i);
+						Select(codeEditSpace, startPos + higlight.StartPosition,
+							higlight.EndPosition - higlight.StartPosition, higlight.Color);
+					}
+					// }, null);
+					// });
+				}
+				codeEditSpace.Select(selectionStart, selectionLength);
+				codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
+			}
+		}
 
 		private void Select(System.Windows.Forms.RichTextBox codeEditSpace, int start, int length, Color color)
 		{
-			codeEditSpace.SelectionStart = start;
-			codeEditSpace.SelectionLength = length;
+			codeEditSpace.Select(start, length);
 			codeEditSpace.SelectionColor = color;
 		}
 
