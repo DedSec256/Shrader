@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using Shrader.IDE.Compilation;
 using ShaderBuilder.Utils;
 using System;
+using System.Windows.Forms.Integration;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -117,7 +118,7 @@ namespace Shrader.IDE.ViewModel
 
         private void FilledTab(TabItem tab, string name)
         {
-            var rtb = tab.Content as System.Windows.Forms.RichTextBox;
+            var rtb = (tab.Content as WindowsFormsHost).Child as System.Windows.Forms.RichTextBox;
             using (var file = File.Open(name, FileMode.Open))
             {
                 using (var reader = new StreamReader(file))
@@ -162,7 +163,7 @@ namespace Shrader.IDE.ViewModel
                 {
                     using (var writer = new StreamWriter(file))
                     {
-                        var rtb = tab.Content as System.Windows.Forms.RichTextBox;
+                        var rtb = (tab.Content as WindowsFormsHost).Child as System.Windows.Forms.RichTextBox;
                         var text = rtb.Text;
                         writer.Write(text);
                     }

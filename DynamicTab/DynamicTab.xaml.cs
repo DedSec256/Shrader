@@ -80,9 +80,7 @@ namespace DynamicTab
                 tab.HeaderTemplate = tabDynamic.FindResource("TabHeader") as DataTemplate;
 	            var formsHost = new WindowsFormsHost();
 	            formsHost.Child = rtb;
-	            tab.Content = formsHost;
-				//tab.Content = rtb;
-				
+	            tab.Content = formsHost;				
             }
         }
 
