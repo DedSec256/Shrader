@@ -16,16 +16,19 @@ namespace Shrader.IDE.Tools.VideoSaver
 		private const int MaxShots = 100;
 		private static bool isRecord = false;
 		public static bool IsRecording => isRecord;
+		private static string Filename;
 
 		static VideoShaderRecorder()
 		{
 			Images = new List<Bitmap>();
 		}
 
-		public static void StartRecord()
+		public static void StartRecord(string filename)
 		{
+			if (isRecord) return;
 			Images = new List<Bitmap>();
 			isRecord = true;
+			Filename = filename;
 		}
 
 		public static void StopRecord()

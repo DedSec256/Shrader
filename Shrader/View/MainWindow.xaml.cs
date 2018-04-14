@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using Shrader.IDE.Tools.SyntaxHighlighter;
 
 using Shrader.IDE.Compilation;
 using System.Windows.Threading;
@@ -23,7 +22,7 @@ namespace Shrader.IDE.View
     {
         public MainWindow()
         {
-            InitializeComponent();
+			InitializeComponent();
             IoC.IoC.SetupWindow();
             IoC.IoC.SetupMainPage();
             DataContext = IoC.IoC.MainWindowViewModel;

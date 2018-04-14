@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
 using ShaderBuilder.Utils;
 using Shrader.IDE.Model;
@@ -48,61 +49,35 @@ namespace ShaderBuilder
             private int UniformMouse = -1;
             private int UniformTime = -1;
             private int UniformDisplay = -1;
+            private int UniformTexture = -1;
+            private int TextureID = -1;
 
-            private static int MakeGlTexture(int Format, IntPtr pixels, int w, int h)
+            static int LoadTexture(string filename)
             {
-                int texObject;
-                GL.GenTextures(1, out texObject); 
-                GL.BindTexture(TextureTarget.Texture2D, texObject);
+                if (String.IsNullOrEmpty(filename))
+                    throw new ArgumentException(filename);
 
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                GL.Enable(EnableCap.Texture2D);
+
+                int id;
+                GL.GenTextures(1, out id);
+                GL.ActiveTexture(TextureUnit.Texture0 + id);
+                GL.BindTexture(TextureTarget.Texture2D, id);
+                
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                // GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 0);
 
-                switch (Format)
-                {
-                    case (int)PixelFormat.Rgb:
-                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, w, h, 0, PixelFormat.Rgb, PixelType.UnsignedByte, pixels);
-                        break;
-                    case (int)PixelFormat.Rgba:
-                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
-                        break;
-                }  
-                return texObject;
-            }
+                Bitmap bmp = new Bitmap(filename);
+                BitmapData bmp_data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            private int GetTexture(string texturePath)
-            {
-                string path = String.Copy(texturePath);
-                int imageId, mGlTextureObject = -1;
-                Il.ilInit();
-                Il.ilEnable(Il.IL_ORIGIN_SET);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
+                    OpenTK.Graphics.OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, bmp_data.Scan0);
+                GL.BindTexture(TextureTarget.Texture2D, id);
 
-                Il.ilGenImages(2, out imageId);
-                Il.ilBindImage(imageId);
+                bmp.UnlockBits(bmp_data);
 
-                if (Il.ilLoadImage(texturePath))
-                {
-                    int width = Il.ilGetInteger(Il.IL_IMAGE_WIDTH);
-                    int height = Il.ilGetInteger(Il.IL_IMAGE_HEIGHT);
-
-                    int bitspp = Il.ilGetInteger(Il.IL_IMAGE_BITS_PER_PIXEL);
-
-                    switch (bitspp) 
-                    {
-                        case 24:
-                            mGlTextureObject = MakeGlTexture((int)PixelFormat.Rgb, Il.ilGetData(), width, height);
-                            break;
-                        case 32:
-                            mGlTextureObject = MakeGlTexture((int)PixelFormat.Rgba, Il.ilGetData(), width, height);
-                            break;
-                    }
-
-                    Il.ilDeleteImages(2, ref imageId);
-                }
-
-                return mGlTextureObject;
+                return id;
             }
 
             public Uniforms(SettingModel model, int program)
@@ -118,12 +93,10 @@ namespace ShaderBuilder
 
                 if (model.ImagesPath == null || model.ImagesPath.Count() == 0)
                     return;
-                string name = model.ImagesPath.First();
-                int id = GetTexture(name);
-                GL.ActiveTexture(TextureUnit.Texture0);
 
-                int texLocation = GL.GetUniformLocation(program, UNIFORM_TEXTURE);
-                GL.Uniform1(texLocation, 0);
+                string name = model.ImagesPath.First();
+                TextureID = LoadTexture(name);
+                UniformTexture = GL.GetUniformLocation(program, UNIFORM_TEXTURE);
             }
 
             public void UpdateUniforms(OpenTK.GLControl control)
@@ -138,6 +111,10 @@ namespace ShaderBuilder
                 if (UniformMouse != -1)
                     // TODO: Mouse uniforms
                     GL.Uniform4(UniformMouse, 100, 100, 0, 0);
+
+                GL.ActiveTexture(TextureUnit.Texture0 + TextureID);
+                GL.BindTexture(TextureTarget.Texture2D, TextureID);
+                GL.Uniform1(UniformTexture, TextureID);
             }
 
             public void DeleteUniforms()
