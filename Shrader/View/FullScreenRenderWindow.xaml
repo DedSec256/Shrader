@@ -4,7 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:opentk="clr-namespace:OpenTK;assembly=OpenTK.GLControl"
-        xmlns:local="clr-namespace:Shrader.IDE.View"
+        WindowStyle="None"
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen" 
+        WindowState="Maximized"
         mc:Ignorable="d"
         Title="Full" Height="450" Width="800">
     <Window.InputBindings>
