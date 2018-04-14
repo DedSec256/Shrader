@@ -12,7 +12,7 @@
         Title="Shrader" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.InputBindings>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveCommand}"/>
-        <KeyBinding Key="C" Modifiers="Ctrl"  Command="{Binding CreateFileCommand}"/>
+        <KeyBinding Key="C" Modifiers="Shift+Ctrl"  Command="{Binding CreateFileCommand}"/>
     </Window.InputBindings>
     <Grid>
         <!--#region Grid Definition-->
@@ -35,18 +35,20 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Run" Command="{Binding RunCommand}"/>
+            <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}"/>
         </Menu>
         
         <WindowsFormsHost Grid.Row="1" Initialized="WindowsFormsHost_Initialized">
             <opentk:GLControl x:Name="RenderCanvas" Load="RenderCanvas_Load" Paint="RenderCanvas_Paint" />
         </WindowsFormsHost>
 
-        
 
-        <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}"/>
+
+        <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}" FontStyle="Normal" FontFamily="Consolas" FontSize="14"/>
 
         <dt:CustomDynamicTab x:Name="DynamicTab" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
-                             TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent">
+                             TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent"
+                             FontStyle="Normal" FontFamily="Consolas" FontSize="14">
         </dt:CustomDynamicTab>
 
 

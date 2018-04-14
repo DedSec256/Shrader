@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using Shrader.IDE.Tools.SyntaxHighlighter;
 
 using Shrader.IDE.Compilation;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace Shrader.IDE.View
 {
@@ -34,8 +36,9 @@ namespace Shrader.IDE.View
             {
                 TabItems = DynamicTab.TabItems                
             };
-			SyntaxHighlighter.LoadOrCreate("settings.ini");
-		}
+			SyntaxHighlighter.LoadOrCreate("settings.ini");            
+
+        }
 
         #region Highlight part
 
@@ -91,9 +94,11 @@ namespace Shrader.IDE.View
 			codeEditSpace.SelectionColor = color;
 		}
 
-		#endregion
+        #endregion
 
-		#region Render part
+        #region Render part
+
+        private const int TICK_PERIOD = 25;
 
         private void WindowsFormsHost_Initialized(object sender, EventArgs e)
         {
@@ -102,6 +107,24 @@ namespace Shrader.IDE.View
 
         private void RenderCanvas_Load(object sender, EventArgs e)
         {
+            var timer = new DispatcherTimer();
+            timer.Tick += Timer_Tick;            
+            timer.Interval = TimeSpan.FromMilliseconds(TICK_PERIOD);
+            timer.Start();
+        }
+
+        private static bool isExecute = false;
+        private static object lockToken = new object();
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            lock (lockToken)
+            {
+                if (isExecute == true)
+                    return; 
+            }
+            isExecute = true;
+            RenderCanvas.Invalidate();
+            isExecute = false;
         }
 
         private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)

@@ -12,6 +12,10 @@ using System.IO;
 using System.Windows.Documents;
 using Shrader.IDE.Compilation;
 using ShaderBuilder.Utils;
+using System;
+using System.Windows.Forms.Integration;
+using Shrader.IDE.Model;
+using Shrader.IDE.View;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -35,13 +39,18 @@ namespace Shrader.IDE.ViewModel
         /// Collection of tabitems
         /// </summary>
         public ObservableCollection<TabItem> TabItems { get; set; }
+        /// <summary>
+        /// Model for binding settings
+        /// </summary>
+        public SettingModel SettingModel { get;
+            set; } = new SettingModel();
     #endregion
 
         #region Commands
-    /// <summary>
-    /// Command for run shaders
-    /// </summary>
-    public ICommand RunCommand { get; set; }
+        /// <summary>
+        /// Command for run shaders
+        /// </summary>
+        public ICommand RunCommand { get; set; }
         /// <summary>
         /// Create new gcls file command and add it
         /// </summary>
@@ -54,9 +63,16 @@ namespace Shrader.IDE.ViewModel
         /// Save file changes command
         /// </summary>
         public ICommand SaveCommand { get; set; }
+        /// <summary>
+        /// Open settings window command
+        /// </summary>
+        public ICommand OpenSettingsCommand { get; set; }
         #endregion
 
         #region Constructor
+
+        private const string FILTER = "(*.GLSL)|*.GLSL";
+
         public MainWindowViewModel(GLControl RenderCanvas, CustomDynamicTab DynamicTab)
         {
             GLControl = RenderCanvas;
@@ -66,7 +82,7 @@ namespace Shrader.IDE.ViewModel
                 var dialog = new SaveFileDialog
                 {
                     DefaultExt = ".glsl",
-                    Filter = "(*.GLSL)|*.GLSL"
+                    Filter = FILTER
                 };
                 if (dialog.ShowDialog() == true)
                 {
@@ -79,7 +95,7 @@ namespace Shrader.IDE.ViewModel
             {
                 var dialog = new OpenFileDialog
                 {
-                    Filter = "(*.GLSL)|*.GLSL",
+                    Filter = FILTER,
                     CheckFileExists = true,
                     Multiselect = true
                 };
@@ -87,7 +103,8 @@ namespace Shrader.IDE.ViewModel
                 {
                     foreach (var name in dialog.FileNames)
                     {
-                        AddToTabItems(name);
+                        var tab = AddToTabItems(name);
+                        FilledTab(tab, name);
                     }
                 }
             });
@@ -97,10 +114,11 @@ namespace Shrader.IDE.ViewModel
                 Logger _logger = Logger.Instance;
                 _logger.ClearMessages();
 
-                //SaveInFiles(TabItems)
+                SaveInFiles(TabItems);
                 //StaticShaderBuilder.RenderShader(GetTabFilesPath());
 
                 StaticShaderBuilder.RenderShader(GetTabFilesPath());
+                StaticShaderBuilder.Paint(RenderCanvas);
                 ErrorText = _logger.GetAllMessage();
             });
 
@@ -109,32 +127,55 @@ namespace Shrader.IDE.ViewModel
                 if (DynamicTab.SelectedItem == null)
                     return;
                 var tab = DynamicTab.SelectedItem as TabItem;
-                SaveInFiles(new TabItem[] { tab });                   
+                SaveInFiles(new TabItem[] { tab });                  
+            });
+
+            OpenSettingsCommand = new RelayCommand((obj) =>
+            {
+                var window = new SettingsWindow(SettingModel);
+                window.Show();                
             });
         }
+
+
 
         #endregion
 
         #region Help methods
-        private void AddToTabItems(string name)
+
+        private void FilledTab(TabItem tab, string name)
         {
-            if (TabItems.FirstOrDefault(t => t.Name == Path.GetFileNameWithoutExtension(name)) != null) return;
-            TabItems.Add(CreateTabItem(name));
+            var rtb = (tab.Content as WindowsFormsHost).Child as System.Windows.Forms.RichTextBox;
+            using (var file = File.Open(name, FileMode.Open))
+            {
+                using (var reader = new StreamReader(file))
+                {
+                    rtb.Text = reader.ReadToEnd();
+                }
+            }
         }
 
-        private static TabItem CreateTabItem(string name)
+        private TabItem AddToTabItems(string name)
+        {
+            if (TabItems.FirstOrDefault(t => t.Name == Path.GetFileNameWithoutExtension(name)) != null) return null;
+            var tab = CreateTabItem(name);
+            TabItems.Add(tab);
+            return tab;
+        }
+
+        private TabItem CreateTabItem(string name)
         {
             return new TabItem
             {
                 Header = name,
-                Name = Path.GetFileNameWithoutExtension(name)
+                Name = "tab" + TabItems.Count().ToString()
             };
         } 
 
         private IEnumerable<string> GetTabFilesPath()
         {
             return from t in TabItems
-                   select t.Header.ToString();
+                   select t.Header as string;
         }
 
         private void SaveInFiles(IEnumerable<TabItem> tabs)
@@ -142,12 +183,12 @@ namespace Shrader.IDE.ViewModel
             foreach (var tab in tabs)
             {
                 var path = tab.Header.ToString();
-                using (var file = File.Open(path, FileMode.CreateNew))
+                using (var file = File.Open(path, FileMode.Create))
                 {
                     using (var writer = new StreamWriter(file))
                     {
-                        var rtb = tab.Content as RichTextBox;
-                        var text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                        var rtb = (tab.Content as WindowsFormsHost).Child as System.Windows.Forms.RichTextBox;
+                        var text = rtb.Text;
                         writer.Write(text);
                     }
                 }

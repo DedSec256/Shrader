@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Shrader.IDE.Compilation
 {
@@ -17,6 +18,12 @@ namespace Shrader.IDE.Compilation
 
         public static void RenderShader(IEnumerable<string> namesOfShaderFile)
         {
+            using (StreamWriter sr = new StreamWriter(EXECUTE_PATH, false))
+            {
+                sr.WriteLine("");
+                sr.Close();
+            }
+
             StaticShaderLinker.LinkSources(namesOfShaderFile, EXECUTE_PATH);
             shaderBuilder.RenderShader(EXECUTE_PATH);
         }
