@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
 
@@ -49,7 +50,7 @@ namespace ShaderBuilder.Utils
                 GL.DeleteShader(_fragmentShader);
         }
 
-        private static int CreateProgram(string vShader, string fShader)
+		private static int CreateProgram(string vShader, string fShader)
         {
             _vertexShader = LoadShader(ShaderType.VertexShader, vShader);
             _fragmentShader = LoadShader(ShaderType.FragmentShader, fShader);

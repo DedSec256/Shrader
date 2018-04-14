@@ -64,8 +64,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tao.DevIl">
+      <HintPath>libs\Tao.DevIl.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\SettingModel.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="ShaderBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

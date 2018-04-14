@@ -73,15 +73,17 @@ namespace DynamicTab
             foreach (var item in e.NewItems)
             {
                 // add controls to tab item, this case I added just a textbox
-                var rtb = new System.Windows.Forms.RichTextBox();
-	            rtb.DetectUrls = false;
-	            rtb.AutoWordSelection = true;
-	            rtb.ReadOnly = false;
-                rtb.TextChanged += Rtb_TextChanged;
+	            var rtb = new System.Windows.Forms.RichTextBox
+	            {
+		            DetectUrls = false,
+		            AutoWordSelection = false,
+		            ReadOnly = false,
+	            };
+	         
+	            rtb.TextChanged += Rtb_TextChanged;
                 var tab = (item as TabItem);
                 tab.HeaderTemplate = tabDynamic.FindResource("TabHeader") as DataTemplate;
-	            var formsHost = new WindowsFormsHost();
-	            formsHost.Child = rtb;
+	            var formsHost = new WindowsFormsHost {Child = rtb};
 	            tab.Content = formsHost;				
             }
         }

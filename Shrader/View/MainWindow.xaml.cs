@@ -1,6 +1,7 @@
 ﻿using Shrader.IDE.ViewModel;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using Shrader.IDE.Tools.SyntaxHighlighter;
@@ -8,6 +9,10 @@ using Shrader.IDE.Tools.SyntaxHighlighter;
 using Shrader.IDE.Compilation;
 using System.Windows.Threading;
 using MahApps.Metro.Controls;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using Shrader.IDE.Tools;
+using Shrader.IDE.Tools.VideoSaver;
 
 namespace Shrader.IDE.View
 {
