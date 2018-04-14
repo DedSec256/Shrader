@@ -121,12 +121,14 @@ namespace Shrader.IDE.ViewModel
             {
                 Logger _logger = Logger.Instance;
                 _logger.ClearMessages();
+                StaticShaderBuilder.StopRender();
 
                 SaveInFiles(TabItems);
                 //StaticShaderBuilder.RenderShader(GetTabFilesPath());
 
                 StaticShaderBuilder.RenderShader(GetTabFilesPath());
                 StaticShaderBuilder.Paint(RenderCanvas);
+
                 ErrorText = _logger.GetAllMessage();
             });
 
