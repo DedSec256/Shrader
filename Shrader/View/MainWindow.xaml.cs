@@ -92,9 +92,10 @@ namespace Shrader.IDE.View
             RenderCanvas.MakeCurrent();
         }
 
+        DispatcherTimer timer;
         private void RenderCanvas_Load(object sender, EventArgs e)
         {
-            var timer = new DispatcherTimer();
+            timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;            
             timer.Interval = TimeSpan.FromMilliseconds(TICK_PERIOD);
             timer.Start();
@@ -119,6 +120,13 @@ namespace Shrader.IDE.View
             StaticShaderBuilder.Paint(RenderCanvas);
         }
 
-		#endregion
-	}
+
+        private void MenuItem_PauseClick(object sender, RoutedEventArgs e)
+        {
+            timer?.Stop();
+        }
+
+        #endregion
+
+    }
 }

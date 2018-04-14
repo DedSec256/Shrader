@@ -35,7 +35,9 @@
                     <MenuItem Header="Existing" Command="{Binding AddExistFileCommand}"/>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Run" Command="{Binding RunCommand}"/>
+            <MenuItem Header="Start" Command="{Binding RunCommand}"/>
+            <MenuItem Header="Stop" Command="{Binding StopCommand}"/>
+            <MenuItem Header="Pause" Click="MenuItem_PauseClick"/>
             <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}"/>
         </Menu>
         

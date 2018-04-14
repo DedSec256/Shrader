@@ -67,6 +67,10 @@ namespace Shrader.IDE.ViewModel
         /// Open settings window command
         /// </summary>
         public ICommand OpenSettingsCommand { get; set; }
+        /// <summary>
+        /// Stop render command
+        /// </summary>
+        public ICommand StopCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -144,6 +148,11 @@ namespace Shrader.IDE.ViewModel
             {
                 var window = new SettingsWindow(SettingModel);
                 window.Show();                
+            });
+
+            StopCommand = new RelayCommand((obj) =>
+            {
+                //TODO
             });
         }
 
