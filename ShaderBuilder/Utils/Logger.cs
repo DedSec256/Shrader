@@ -55,8 +55,12 @@ namespace ShaderBuilder
         {
             messages += "Failed to load shader file..." + Environment.NewLine;
         }
+	    public static void LinkerError(string message = "")
+	    {
+		    messages += "Failed to link source files: " + message + Environment.NewLine;
+	    }
 
-        public static string GetAllMessage()
+		public static string GetAllMessage()
         {
             return messages;
         }

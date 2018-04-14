@@ -3,25 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Shrader.IDE.Compile;
 
 namespace Shrader.IDE
 {
     /// <summary>
     /// Static shader builder class
     /// </summary>
-    public static class StaticShaderBuilder
+    internal static class StaticShaderBuilder
     {
         private static ShaderBuilder.ShaderBuilder shaderBuilder = new ShaderBuilder.ShaderBuilder();
+	    private const string EXECUTE_PATH = "executive.glsl";
 
-        public static void Paint(OpenTK.GLControl control)
+		public static void Paint(OpenTK.GLControl control)
         {
             shaderBuilder.Paint(control);
         }
 
         public static void RenderShader(string[] namesOfShaderFile)
         {
-            // TODO - make 1 files of namesOfShaderFile array...
-            shaderBuilder.RenderShader(namesOfShaderFile[0]);
+            StaticShaderLinker.LinkSources(namesOfShaderFile, EXECUTE_PATH);
+            shaderBuilder.RenderShader(EXECUTE_PATH);
         }
 
         public static void Resize(OpenTK.GLControl control)
@@ -34,4 +36,6 @@ namespace Shrader.IDE
             shaderBuilder.StopRender();
         }
     }
+
+
 }
