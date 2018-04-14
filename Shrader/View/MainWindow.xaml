@@ -12,7 +12,7 @@
         Title="Shrader" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.InputBindings>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveCommand}"/>
-        <KeyBinding Key="C" Modifiers="Ctrl"  Command="{Binding CreateFileCommand}"/>
+        <KeyBinding Key="C" Modifiers="Shift+Ctrl"  Command="{Binding CreateFileCommand}"/>
     </Window.InputBindings>
     <Grid>
         <!--#region Grid Definition-->
