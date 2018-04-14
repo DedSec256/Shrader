@@ -118,6 +118,7 @@ namespace Shrader.IDE.ViewModel
                 //StaticShaderBuilder.RenderShader(GetTabFilesPath());
 
                 StaticShaderBuilder.RenderShader(GetTabFilesPath());
+                StaticShaderBuilder.Paint(RenderCanvas);
                 ErrorText = _logger.GetAllMessage();
             });
 
@@ -174,7 +175,7 @@ namespace Shrader.IDE.ViewModel
         private IEnumerable<string> GetTabFilesPath()
         {
             return from t in TabItems
-                   select t.Header.ToString();
+                   select t.Header as string;
         }
 
         private void SaveInFiles(IEnumerable<TabItem> tabs)
@@ -182,7 +183,7 @@ namespace Shrader.IDE.ViewModel
             foreach (var tab in tabs)
             {
                 var path = tab.Header.ToString();
-                using (var file = File.Open(path, FileMode.CreateNew))
+                using (var file = File.Open(path, FileMode.Create))
                 {
                     using (var writer = new StreamWriter(file))
                     {
