@@ -107,7 +107,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 		private class StatesMachine
 		{
 			private States _state = States.Default;
-			private readonly List<HiglightArea> _areas = new List<HiglightArea>();
+			private readonly List<HiglightArea> _areas = new List<HiglightArea>(1000);
 			private HashSet<char> Symbols = new HashSet<char>() {',', '{', '}', '(', '[', ']', ')', '%', ';'};
 
 			private const string DEFAULT = "[default]";
