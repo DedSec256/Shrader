@@ -15,6 +15,7 @@ using ShaderBuilder.Utils;
 using System;
 using System.Windows.Forms.Integration;
 using Shrader.IDE.Model;
+using Shrader.IDE.Tools;
 using Shrader.IDE.View;
 using Shrader.IDE.Tools.VideoSaver;
 

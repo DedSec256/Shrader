@@ -12,7 +12,6 @@ namespace Shrader.IDE.Tools
 {
 	static class UIExtensions
 	{
-		static Dispatcher context = Dispatcher.CurrentDispatcher;
 		public static void LoadHighlightinngs(this System.Windows.Forms.RichTextBox codeEditSpace)
 		{
 			void Select(System.Windows.Forms.RichTextBox codeEdit, int start, int length, Color color)
@@ -26,21 +25,13 @@ namespace Shrader.IDE.Tools
 			int selectionStart = codeEditSpace.SelectionStart;
 
 			var higlights = SyntaxHighlighter.SyntaxHighlighter.Parse(codeEditSpace.Text);
-			/*foreach (var higlight in higlights)
+			foreach (var higlight in higlights)
 			{
 				Select(codeEditSpace, higlight.StartPosition,
 					higlight.EndPosition - higlight.StartPosition,
 					higlight.Color);
-			}*/
-			Parallel.ForEach(higlights, higlight =>
-			{
-				context.BeginInvoke(DispatcherPriority.Send, (ThreadStart)delegate ()
-				{
-					Select(codeEditSpace, higlight.StartPosition,
-						higlight.EndPosition - higlight.StartPosition,
-						higlight.Color);
-				}, null);
-			});
+			}
+
 			/*
 			if (codeEditSpace.Lines.Length == 0)
 			{

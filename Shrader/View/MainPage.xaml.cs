@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Drawing;
 using System.Windows.Threading;
+using Shrader.IDE.Tools;
 
 namespace Shrader.IDE.View
 {
@@ -38,47 +39,7 @@ namespace Shrader.IDE.View
             if (codeEditSpace == null)
                 return;
 
-            codeEditSpace.Enabled = false;
-
-            codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
-            int selectionStart = codeEditSpace.SelectionStart;
-            int selectionLength = codeEditSpace.SelectionLength;
-
-            if (codeEditSpace.Lines.Length == 0)
-            {
-                var higlights = SyntaxHighlighter.Parse(codeEditSpace.Text);
-                foreach (var higlight in higlights)
-                {
-                    Select(codeEditSpace, higlight.StartPosition,
-                        higlight.EndPosition - higlight.StartPosition,
-                        higlight.Color);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < codeEditSpace.Lines.Length; i++)
-                {
-                    var higlights = SyntaxHighlighter.Parse(codeEditSpace.Lines[i]);
-                    foreach (var higlight in higlights)
-                    {
-                        var startPos = codeEditSpace.GetFirstCharIndexFromLine(i);
-                        Select(codeEditSpace, startPos + higlight.StartPosition,
-                            higlight.EndPosition - higlight.StartPosition, higlight.Color);
-                    }
-
-                }
-                codeEditSpace.Select(selectionStart, selectionLength);
-                codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
-            }
-
-            codeEditSpace.Enabled = true;
-            codeEditSpace.Focus();
-        }
-
-        private void Select(System.Windows.Forms.RichTextBox codeEditSpace, int start, int length, System.Drawing.Color color)
-        {
-            codeEditSpace.Select(start, length);
-            codeEditSpace.SelectionColor = color;
+            codeEditSpace.LoadHighlightinngs();
         }
 
         #endregion

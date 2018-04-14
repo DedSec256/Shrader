@@ -24,6 +24,7 @@ namespace Shrader.IDE.Tools.VideoSaver
 
 		public static void StartRecord()
 		{
+			if (isRecord) return;
 			Images = new List<Bitmap>();
 			isRecord = true;
 		}

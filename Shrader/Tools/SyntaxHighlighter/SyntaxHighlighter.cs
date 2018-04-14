@@ -77,7 +77,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 			Color funcColor = Color.FromArgb(255, 0, 20, 250);
 
 			string[] types = { "bool", "int", "float", "vec3", "vec2", "vec4", "mat3", };
-			string[] keywords = { "void", "return", "if", "else", "for", "out", "break", "in", "const", "inout", "sign", "normalize", "clamp", "step", "smoothstep", "mix", "pow", "reflect", "texture" };
+			string[] keywords = { "uniform", "void", "return", "if", "else", "for", "out", "break", "in", "const", "inout", "sign", "normalize", "clamp", "step", "smoothstep", "mix", "pow", "reflect", "texture" };
 			string[] funcs = { "cos", "sin", "fract", "dot", "max", "abs", "length", "floor", "min", "mod", "log"};
 
 			SyntaxKeyword[] syntaxStandarts =
@@ -225,8 +225,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							{
 								StartPosition = startPosition,
 								EndPosition = index,
-								Color = value.Color,
-								Key = buffer.ToString()
+								Color = value.Color
 							});
 						}
 						_state = States.Default;
