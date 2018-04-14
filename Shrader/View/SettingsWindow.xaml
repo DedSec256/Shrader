@@ -1,0 +1,29 @@
+﻿<Window x:Class="Shrader.IDE.View.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shrader.IDE.View"
+        mc:Ignorable="d"
+        Title="Settings" Height="200" Width="400">
+    <StackPanel>
+        <DockPanel>
+            <TextBlock Padding="4">Time</TextBlock>
+            <CheckBox Padding="4" VerticalContentAlignment="Center" IsChecked="{Binding IsTime}"></CheckBox>
+        </DockPanel>
+        <DockPanel>
+            <TextBlock Padding="4">Mouse</TextBlock>
+            <CheckBox Padding="4" VerticalContentAlignment="Center" IsChecked="{Binding IsMouse}"></CheckBox>
+        </DockPanel>
+        <DockPanel>
+            <TextBlock Padding="4">ViewPort</TextBlock>
+            <CheckBox Padding="4" VerticalContentAlignment="Center" IsChecked="{Binding IsViewPort}"></CheckBox>
+        </DockPanel>
+        
+        <Button Command="{Binding AddImageCommand}">Add Image</Button>
+        <ListBox ItemsSource="{Binding ImagesPath}"/>
+
+        <Button Command="{Binding SubmitCommand}">OK</Button>
+
+    </StackPanel>
+</Window>
