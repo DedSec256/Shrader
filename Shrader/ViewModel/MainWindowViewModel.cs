@@ -14,6 +14,8 @@ using Shrader.IDE.Compilation;
 using ShaderBuilder.Utils;
 using System;
 using System.Windows.Forms.Integration;
+using Shrader.IDE.Model;
+using Shrader.IDE.View;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -37,13 +39,18 @@ namespace Shrader.IDE.ViewModel
         /// Collection of tabitems
         /// </summary>
         public ObservableCollection<TabItem> TabItems { get; set; }
+        /// <summary>
+        /// Model for binding settings
+        /// </summary>
+        public SettingModel SettingModel { get;
+            set; } = new SettingModel();
     #endregion
 
         #region Commands
-    /// <summary>
-    /// Command for run shaders
-    /// </summary>
-    public ICommand RunCommand { get; set; }
+        /// <summary>
+        /// Command for run shaders
+        /// </summary>
+        public ICommand RunCommand { get; set; }
         /// <summary>
         /// Create new gcls file command and add it
         /// </summary>
@@ -56,6 +63,10 @@ namespace Shrader.IDE.ViewModel
         /// Save file changes command
         /// </summary>
         public ICommand SaveCommand { get; set; }
+        /// <summary>
+        /// Open settings window command
+        /// </summary>
+        public ICommand OpenSettingsCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -116,9 +127,21 @@ namespace Shrader.IDE.ViewModel
                 if (DynamicTab.SelectedItem == null)
                     return;
                 var tab = DynamicTab.SelectedItem as TabItem;
-                SaveInFiles(new TabItem[] { tab });                   
+                SaveInFiles(new TabItem[] { tab });                  
+            });
+
+            OpenSettingsCommand = new RelayCommand((obj) =>
+            {
+                var window = new SettingsWindow(SettingModel);
+                window.Show();                
             });
         }
+
+
+
+        #endregion
+
+        #region Help methods
 
         private void FilledTab(TabItem tab, string name)
         {
@@ -132,9 +155,6 @@ namespace Shrader.IDE.ViewModel
             }
         }
 
-        #endregion
-
-        #region Help methods
         private TabItem AddToTabItems(string name)
         {
             if (TabItems.FirstOrDefault(t => t.Name == Path.GetFileNameWithoutExtension(name)) != null) return null;
