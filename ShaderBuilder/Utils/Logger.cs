@@ -68,7 +68,10 @@ namespace ShaderBuilder.Utils
 
 		public string GetAllMessage()
         {
-            return _messages;
+            if (_messages == "")
+                return "OK!";
+            else
+                return _messages;
         }
     }
 }

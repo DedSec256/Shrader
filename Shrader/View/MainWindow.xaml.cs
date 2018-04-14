@@ -1,22 +1,11 @@
 ﻿using Shrader.IDE.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Shrader.IDE.Tools.SyntaxHighlighter;
 
 using Shrader.IDE.Compilation;
-using System.Threading;
 using System.Windows.Threading;
 using MahApps.Metro.Controls;
 
@@ -51,6 +40,7 @@ namespace Shrader.IDE.View
 
             codeEditSpace.Enabled = false;
 
+			codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
 			int selectionStart = codeEditSpace.SelectionStart;
 			int selectionLength = codeEditSpace.SelectionLength;
 

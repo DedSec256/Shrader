@@ -108,8 +108,11 @@ namespace Shrader.IDE.ViewModel
 	                    foreach (var source in solution)
 	                    {
 							var tab = AddToTabItems(source.Key);
-		                    FilledTab(tab, source.Key);
-						}
+		                    if (tab != null)
+		                    {
+			                    FilledTab(tab, source.Key);
+		                    }
+	                    }
                     }
                 }
             });
@@ -118,12 +121,14 @@ namespace Shrader.IDE.ViewModel
             {
                 Logger _logger = Logger.Instance;
                 _logger.ClearMessages();
+                StaticShaderBuilder.StopRender();
 
                 SaveInFiles(TabItems);
                 //StaticShaderBuilder.RenderShader(GetTabFilesPath());
 
                 StaticShaderBuilder.RenderShader(GetTabFilesPath());
                 StaticShaderBuilder.Paint(RenderCanvas);
+
                 ErrorText = _logger.GetAllMessage();
             });
 
@@ -168,7 +173,7 @@ namespace Shrader.IDE.ViewModel
             return tab;
         }
 
-        private TabItem CreateTabItem(string name)
+		private TabItem CreateTabItem(string name)
         {
             return new TabItem
             {
