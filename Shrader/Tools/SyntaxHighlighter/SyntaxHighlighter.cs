@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -94,9 +95,9 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 			return syntaxKeywords;
 		}
 
-		public static IEnumerable<HiglightArea> Parse(string text)
+		public static Task<IEnumerable<HiglightArea>> Parse(string text)
 		{
-				return new StatesMachine().Parse(text, Keywords);
+				return Task.Run(() => new StatesMachine().Parse(text, Keywords));
 		}
 
 		private class StatesMachine
@@ -137,6 +138,8 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							else if (s == '/' && lastS == '/')
 							{
 								_state = States.Comment;
+								startPosition = index - 1;
+								break;
 							}
 							else if ((Char.IsPunctuation(s) || Char.IsSeparator(s)) && s != '/')
 							{
