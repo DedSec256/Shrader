@@ -81,7 +81,7 @@ namespace ShaderBuilder
         /// </summary>
         public ShaderBuilder()
         {
-            GL.ClearColor(Color.DarkSlateBlue);
+            GL.ClearColor(Color.SteelBlue);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace ShaderBuilder
 
             uniforms = new Uniforms(model, program);
 
-            GL.ClearColor(Color.DarkSlateBlue);
+            GL.ClearColor(Color.SteelBlue);
             canDraw = true;
         }
 
@@ -176,7 +176,7 @@ namespace ShaderBuilder
             GL.DeleteProgram(program);
             GL.DeleteBuffer(vertexBuffer);
             ShaderLoader.DeleteShaders();
-            GL.ClearColor(Color.DarkSlateBlue);
+            GL.ClearColor(Color.SteelBlue);
 
             if (uniforms != null)
                 uniforms.DeleteUniforms();

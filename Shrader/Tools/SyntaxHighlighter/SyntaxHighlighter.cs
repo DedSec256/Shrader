@@ -33,6 +33,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 		public int StartPosition { get; set; }
 		public int EndPosition { get; set; }
 		public Color Color { get; set; } 
+		public string Key { get; set; }
 	}
 
 	internal static class SyntaxHighlighter
@@ -110,7 +111,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 			private readonly List<HiglightArea> _areas = new List<HiglightArea>(1000);
 			private HashSet<char> Symbols = new HashSet<char>() {',', '{', '}', '(', '[', ']', ')', '%', ';'};
 
-			private const string DEFAULT = "[default]";
+			private const string DEFAULT = "[d]";
 			public IEnumerable<HiglightArea> Parse(string text, Dictionary<string, SyntaxKeyword> keywords)
 			{
 				int index = 0;
@@ -129,8 +130,6 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 								break;
 							else if (Char.IsLetter(s))
 							{
-								buffer = new StringBuilder();
-								buffer.Append(s);
 								_state = States.Keyword;
 							}
 							else if (s is '#')
@@ -160,7 +159,9 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 								_state = States.Digit;
 							}
 							startPosition = index;
-							break;
+							buffer = new StringBuilder();
+							buffer.Append(s);
+								break;
 						}
 						case States.InText:
 						{
@@ -217,6 +218,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							break;
 						}
 					}
+					buffer.Append(s);
 					if (lastState != DEFAULT)
 					{
 						if (keywords.TryGetValue(lastState, out var value))
@@ -225,7 +227,8 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							{
 								StartPosition = startPosition,
 								EndPosition = index,
-								Color = value.Color
+								Color = value.Color,
+								Key = buffer.ToString()
 							});
 						}
 						_state = States.Default;

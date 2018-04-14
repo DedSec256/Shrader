@@ -1,6 +1,7 @@
 ﻿using Shrader.IDE.ViewModel;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using Shrader.IDE.Tools.SyntaxHighlighter;
@@ -42,7 +43,6 @@ namespace Shrader.IDE.View
 
 			codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
 			int selectionStart = codeEditSpace.SelectionStart;
-			int selectionLength = codeEditSpace.SelectionLength;
 
 			if (codeEditSpace.Lines.Length == 0)
 			{
@@ -61,13 +61,14 @@ namespace Shrader.IDE.View
 					var higlights = SyntaxHighlighter.Parse(codeEditSpace.Lines[i]);
 					foreach (var higlight in higlights)
 					{
+						//using(var writer ("log.txt").Write($"{higlight.Key} - {higlight.Color.A};  {higlight.Color.R}; {higlight.Color.B}; {higlight.Color.G}");
 						var startPos = codeEditSpace.GetFirstCharIndexFromLine(i);
 						Select(codeEditSpace, startPos + higlight.StartPosition,
 							higlight.EndPosition - higlight.StartPosition, higlight.Color);
 					}
 					
 				}
-				codeEditSpace.Select(selectionStart, selectionLength);
+				codeEditSpace.Select(selectionStart, 0);
 				codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
 			}
 
@@ -85,7 +86,7 @@ namespace Shrader.IDE.View
 
         #region Render part
 
-        private const int TICK_PERIOD = 25;
+	    private const int TICK_PERIOD = 10;
 
         private void WindowsFormsHost_Initialized(object sender, EventArgs e)
         {
@@ -104,14 +105,14 @@ namespace Shrader.IDE.View
         private static object lockToken = new object();
         private void Timer_Tick(object sender, EventArgs e)
         {
-            lock (lockToken)
-            {
-                if (isExecute == true)
-                    return; 
-            }
-            isExecute = true;
+            //lock (lockToken)
+            //{
+            //    if (isExecute == true)
+            //        return; 
+            //}
+            //isExecute = true;
             RenderCanvas.Invalidate();
-            isExecute = false;
+            //isExecute = false;
         }
 
         private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
