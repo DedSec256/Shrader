@@ -56,12 +56,7 @@ namespace Shrader.IDE.ViewModel
                 if (dialog.ShowDialog() == true)
                 {
                     var name = dialog.SafeFileName;
-                    //TODO: Add tab create
-                    tabItems.Add(new TabItem
-                    {
-                        Header = name,
-                        Name = name.Remove(name.IndexOf("."))
-                    });
+                    tabItems.Add(CreateTabItem(name));
                 }
             });
 
@@ -73,9 +68,21 @@ namespace Shrader.IDE.ViewModel
                 dialog.Multiselect = true;
                 if (dialog.ShowDialog() == true)
                 {
-                    //TODO: Add tabs create loop
+                    foreach (var name in dialog.SafeFileNames)
+                    {
+                        tabItems.Add(CreateTabItem(name));
+                    }
                 }
             });
+        }
+
+        private static TabItem CreateTabItem(string name)
+        {
+            return new TabItem
+            {
+                Header = name,
+                Name = name.Remove(name.IndexOf("."))
+            };
         }
 
         #endregion
