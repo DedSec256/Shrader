@@ -33,8 +33,6 @@ namespace Shrader.IDE.ViewModel
         /// Collection of tabitems
         /// </summary>
         public ObservableCollection<TabItem> TabItems { get; set; }
-
-        //public List<string> FilesPath
     #endregion
 
     #region Commands
@@ -115,6 +113,9 @@ namespace Shrader.IDE.ViewModel
             });
         }
 
+        #endregion
+
+        #region Help methods
         private void AddToTabItems(string name)
         {
             if (TabItems.FirstOrDefault(t => t.Name == Path.GetFileNameWithoutExtension(name)) != null) return;
@@ -126,10 +127,17 @@ namespace Shrader.IDE.ViewModel
             return new TabItem
             {
                 Header = name,
-                Name = Path.GetFileNameWithoutExtension(name)                
+                Name = Path.GetFileNameWithoutExtension(name)
             };
-        }
+        } 
 
+        private IEnumerable<string> GetTabFilesPath()
+        {
+            return from t in TabItems
+                   select t.Header.ToString();
+        }
         #endregion
+
+
     }
 }
