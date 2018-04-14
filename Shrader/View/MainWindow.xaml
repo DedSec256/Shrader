@@ -41,12 +41,13 @@
             <opentk:GLControl x:Name="RenderCanvas" Load="RenderCanvas_Load" Paint="RenderCanvas_Paint" />
         </WindowsFormsHost>
 
-        
 
-        <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}"/>
+
+        <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}" FontStyle="Normal" FontFamily="Consolas" FontSize="14"/>
 
         <dt:CustomDynamicTab x:Name="DynamicTab" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
-                             TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent">
+                             TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent"
+                             FontStyle="Normal" FontFamily="Consolas" FontSize="14">
         </dt:CustomDynamicTab>
 
 
