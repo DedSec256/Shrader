@@ -12,6 +12,7 @@ using System.IO;
 using System.Windows.Documents;
 using Shrader.IDE.Compilation;
 using ShaderBuilder.Utils;
+using System;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -87,7 +88,8 @@ namespace Shrader.IDE.ViewModel
                 {
                     foreach (var name in dialog.FileNames)
                     {
-                        AddToTabItems(name);
+                        var tab = AddToTabItems(name);
+                        FilledTab(tab, name);
                     }
                 }
             });
@@ -113,13 +115,27 @@ namespace Shrader.IDE.ViewModel
             });
         }
 
+        private void FilledTab(TabItem tab, string name)
+        {
+            var rtb = tab.Content as System.Windows.Forms.RichTextBox;
+            using (var file = File.Open(name, FileMode.Open))
+            {
+                using (var reader = new StreamReader(file))
+                {
+                    rtb.Text = reader.ReadToEnd();
+                }
+            }
+        }
+
         #endregion
 
         #region Help methods
-        private void AddToTabItems(string name)
+        private TabItem AddToTabItems(string name)
         {
-            if (TabItems.FirstOrDefault(t => t.Name == Path.GetFileNameWithoutExtension(name)) != null) return;
-            TabItems.Add(CreateTabItem(name));
+            if (TabItems.FirstOrDefault(t => t.Name == Path.GetFileNameWithoutExtension(name)) != null) return null;
+            var tab = CreateTabItem(name);
+            TabItems.Add(tab);
+            return tab;
         }
 
         private static TabItem CreateTabItem(string name)
@@ -146,8 +162,8 @@ namespace Shrader.IDE.ViewModel
                 {
                     using (var writer = new StreamWriter(file))
                     {
-                        var rtb = tab.Content as RichTextBox;
-                        var text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                        var rtb = tab.Content as System.Windows.Forms.RichTextBox;
+                        var text = rtb.Text;
                         writer.Write(text);
                     }
                 }
