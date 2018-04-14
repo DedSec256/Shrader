@@ -39,6 +39,7 @@ namespace Shrader.IDE.View
 
         #region Highlight part
 
+		public bool isChecked = false;
         private void DynamicTab_TextChangedRichTextBoxEvent(object sender, EventArgs e)
         {
 	        var codeEditSpace = sender as System.Windows.Forms.RichTextBox;
