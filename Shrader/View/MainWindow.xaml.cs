@@ -67,6 +67,7 @@ namespace Shrader.IDE.View
 
         #region Render part
 
+        private const int TICK_PERIOD = 25;
 
         private void WindowsFormsHost_Initialized(object sender, EventArgs e)
         {
@@ -77,7 +78,7 @@ namespace Shrader.IDE.View
         {
             var timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;            
-            timer.Interval = TimeSpan.FromMilliseconds(25);
+            timer.Interval = TimeSpan.FromMilliseconds(TICK_PERIOD);
             timer.Start();
         }
 
