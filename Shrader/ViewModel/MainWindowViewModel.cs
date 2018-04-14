@@ -62,10 +62,12 @@ namespace Shrader.IDE.ViewModel
 
             AddExistFileCommand = new RelayCommand((obj) =>
             {
-                var dialog = new OpenFileDialog();
-                dialog.Filter = "(*.GLSL)|*.GLSL";
-                dialog.CheckFileExists = true;
-                dialog.Multiselect = true;
+                var dialog = new OpenFileDialog
+                {
+                    Filter = "(*.GLSL)|*.GLSL",
+                    CheckFileExists = true,
+                    Multiselect = true
+                };
                 if (dialog.ShowDialog() == true)
                 {
                     foreach (var name in dialog.SafeFileNames)
