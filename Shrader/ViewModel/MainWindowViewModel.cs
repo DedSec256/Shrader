@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Documents;
 using Shrader.IDE.Compilation;
+using ShaderBuilder.Utils;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -93,9 +94,15 @@ namespace Shrader.IDE.ViewModel
 
             RunCommand = new RelayCommand((obj) =>
             {
+                Logger _logger = Logger.Instance;
+                _logger.ClearMessages();
+
                 //SaveInFiles(TabItems)
                 //StaticShaderBuilder.RenderShader(GetTabFilesPath());
+
                 StaticShaderBuilder.RenderShader(new []{ "a.glsl", "b.glsl", "c.glsl", "d.glsl"});
+                StaticShaderBuilder.Paint(RenderCanvas);
+                ErrorText = _logger.GetAllMessage();
             });
 
             SaveCommand = new RelayCommand((obj) =>
