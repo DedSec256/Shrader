@@ -173,14 +173,13 @@ namespace Shrader.IDE.ViewModel
                 full.ShowDialog();
                 RenderCanvas.Enabled = true;
                 RenderCanvas.Invalidate();
-                RenderCanvas.MakeCurrent();
-                
+                RenderCanvas.MakeCurrent();   
             });
-
-            StartRecordCommand = new RelayCommand((obj) =>
-            {
-                //VideoShaderRecorder.StartRecord();
-            });
+			/*
+	        StartRecordCommand = new RelayCommand((obj) => new Action<GLControl>((gl) =>
+	        {
+		        
+	        }));*/
         }
 
 

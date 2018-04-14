@@ -91,7 +91,7 @@ namespace ShaderBuilder
                 if (model.IsViewPort)
                     UniformDisplay = GL.GetUniformLocation(program, UNIFORM_DISPLAY);
 
-                if (model.ImagesPath == null || model.ImagesPath.Count() == 0)
+                if (model.ImagesPath == null || !model.ImagesPath.Any())
                     return;
 
                 string name = model.ImagesPath.First();
