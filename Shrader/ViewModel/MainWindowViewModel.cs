@@ -1,11 +1,9 @@
 ﻿using Microsoft.Win32;
 using OpenTK;
 using Shrader.IDE.ViewModel.Base;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Shrader.IDE.ViewModel
@@ -44,30 +42,38 @@ namespace Shrader.IDE.ViewModel
         #endregion
 
         #region Constructor
-        public MainWindowViewModel(GLControl RenderCanvas)
+        public MainWindowViewModel(GLControl RenderCanvas, ObservableCollection<TabItem> tabItems)
         {
             GLControl = RenderCanvas;
 
             CreateFileCommand = new RelayCommand((obj) =>
             {
-                var dialog = new SaveFileDialog();
-                dialog.DefaultExt = ".glsl";
-                dialog.Filter = "(*.GLSL)|*.GLSL";
+                var dialog = new SaveFileDialog
+                {
+                    DefaultExt = ".glsl",
+                    Filter = "(*.GLSL)|*.GLSL"
+                };
                 if (dialog.ShowDialog() == true)
                 {
-                    //TODO: Add tabs create loop
+                    var name = dialog.SafeFileName;
+                    tabItems.Add(CreateTabItem(name));
                 }
             });
 
             AddExistFileCommand = new RelayCommand((obj) =>
             {
-                var dialog = new OpenFileDialog();
-                dialog.Filter = "(*.GLSL)|*.GLSL";
-                dialog.CheckFileExists = true;
-                dialog.Multiselect = true;
+                var dialog = new OpenFileDialog
+                {
+                    Filter = "(*.GLSL)|*.GLSL",
+                    CheckFileExists = true,
+                    Multiselect = true
+                };
                 if (dialog.ShowDialog() == true)
                 {
-                    //TODO: Add tabs create loop
+                    foreach (var name in dialog.SafeFileNames)
+                    {
+                        tabItems.Add(CreateTabItem(name));
+                    }
                 }
             });
 
@@ -75,6 +81,15 @@ namespace Shrader.IDE.ViewModel
             {
                 // TODO: Add sending of shader files
             });
+        }
+
+        private static TabItem CreateTabItem(string name)
+        {
+            return new TabItem
+            {
+                Header = name,
+                Name = name.Remove(name.IndexOf("."))
+            };
         }
 
         #endregion

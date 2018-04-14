@@ -6,9 +6,10 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:Shrader"
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:dt="clr-namespace:DynamicTab;assembly=DynamicTab"
         xmlns:opentk="clr-namespace:OpenTK;assembly=OpenTK.GLControl" ResizeMode="CanMinimize"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Shrader" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
         <!--#region Grid Definition-->
         <Grid.ColumnDefinitions>
@@ -16,7 +17,7 @@
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.4*"/>
             <RowDefinition Height="7*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
@@ -38,14 +39,10 @@
 
         
 
-        <TextBlock Grid.Row="1" Text="{Binding ErrorText, Mode=OneWay}"/>
+        <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}"/>
 
-        <TabControl Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
-            <TabItem>
-                <RichTextBox x:Name="CodeEditSpace"
-                              TextChanged="CodeEditSpace_TextChanged" />
-            </TabItem>
-        </TabControl>
+        <dt:CustomDynamicTab x:Name="DynamicTab" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent"/>
+
 
     </Grid>
 </Window>
