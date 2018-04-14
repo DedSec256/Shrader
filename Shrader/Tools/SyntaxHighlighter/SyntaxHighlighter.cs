@@ -19,6 +19,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 		Keyword,
 		Default,
 		Symbol,
+		InText,
 		Text,
 	}
 
@@ -83,7 +84,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 				new SyntaxKeyword(){ Keyword = States.Comment.ToString(), Color = Color.FromArgb(255, 0, 120, 0)},
 				new SyntaxKeyword(){ Keyword = States.Symbol.ToString(), Color = Color.FromArgb(255, 100, 100, 120)},
 				new SyntaxKeyword(){ Keyword = States.Digit.ToString(), Color = Color.FromArgb(255, 0, 100, 200)},
-				new SyntaxKeyword(){ Keyword = States.Preprocessor.ToString(), Color = Color.FromArgb(255, 40, 40, 40)},
+				new SyntaxKeyword(){ Keyword = States.Preprocessor.ToString(), Color = Color.FromArgb(255, 250, 250, 40)},
 				new SyntaxKeyword(){ Keyword = States.Text.ToString(), Color = Color.FromArgb(255, 200, 40, 50)}
 			};
 
@@ -108,6 +109,8 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 		{
 			private States _state = States.Default;
 			private readonly List<HiglightArea> _areas = new List<HiglightArea>();
+			private HashSet<char> Symbols = new HashSet<char>() {',', '{', '}', '(', '[', ']', ')', '%', ';'};
+
 			private const string DEFAULT = "[default]";
 			public IEnumerable<HiglightArea> Parse(string text, Dictionary<string, SyntaxKeyword> keywords)
 			{
@@ -137,7 +140,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							}
 							else if (s is '\"')
 							{
-								_state = States.Text;
+								_state = States.InText;
 							}
 							else if (s == '/' && lastS == '/')
 							{
@@ -145,8 +148,12 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 								startPosition = index - 1;
 								break;
 							}
-							else if ((Char.IsPunctuation(s) || Char.IsSeparator(s)) && s != '/')
+							else if (Symbols.Contains(s))
 							{
+								if (index == text.Length - 1)
+								{
+									++index;
+								}
 								lastState = States.Symbol.ToString();
 							}
 							else if (Char.IsDigit(s))
@@ -156,14 +163,33 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							startPosition = index;
 							break;
 						}
+						case States.InText:
+						{
+							if (s is '\"')
+							{
+								_state = States.Text;
+								if (index == text.Length - 1)
+								{
+									lastState = States.Text.ToString();
+									++index;
+								}
+							}
+
+							break;
+						}
 						case States.Text:
 						{
-							if (s is '\"') lastState = States.Text.ToString();
+							lastState = States.Text.ToString();
 							break;
 						}
 						case States.Comment:
 						{
 							if (s is '\n' || s is '\r') lastState = States.Comment.ToString();
+							else if (index == text.Length - 1)
+							{
+								lastState = States.Comment.ToString();
+								++index;
+							}
 							break;
 						}
 						case States.Keyword:
@@ -184,6 +210,11 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 						case States.Preprocessor:
 						{
 							if (s == '\n' || s == '\r') lastState = States.Preprocessor.ToString();
+							else if (index == text.Length - 1)
+							{
+								lastState = States.Preprocessor.ToString();
+								++index;
+							}
 							break;
 						}
 					}

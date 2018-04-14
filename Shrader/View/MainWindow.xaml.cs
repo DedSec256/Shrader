@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,7 @@ namespace Shrader.IDE.View
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		SynchronizationContext context = SynchronizationContext.Current;
         public MainWindow()
 		{
             OpenTK.Toolkit.Init();
@@ -43,22 +45,50 @@ namespace Shrader.IDE.View
             if (codeEditSpace == null)
                 return;
 
-		        //if int a = 0.0 return 2;
-
-		    var higlights = SyntaxHighlighter.Parse(codeEditSpace.Text);
 	        int selectionStart = codeEditSpace.SelectionStart;
 	        int selectionLength = codeEditSpace.SelectionLength;
-	        foreach (var higlight in higlights)
+
+			if (codeEditSpace.Lines.Length == 0)
 	        {
-		        codeEditSpace.SelectionStart = higlight.StartPosition;
-		        codeEditSpace.SelectionLength = higlight.EndPosition - higlight.StartPosition;
-		        codeEditSpace.SelectionColor = higlight.Color;
+		        var higlights = SyntaxHighlighter.Parse(codeEditSpace.Text);
+		        foreach (var higlight in higlights)
+		        {
+					Select(codeEditSpace, higlight.StartPosition,
+						higlight.EndPosition - higlight.StartPosition,
+						higlight.Color);
+		        }
 	        }
-	        codeEditSpace.SelectionStart = selectionStart;
-	        codeEditSpace.SelectionLength = selectionLength;
+	        else
+	        {
+		      //  Parallel.For(0, codeEditSpace.Lines.Length, i =>
+		      // {
+		        for (int i = 0; i < codeEditSpace.Lines.Length; i++)
+		        {
+			        // context.Post(state =>
+			        // {
+			        var higlights = SyntaxHighlighter.Parse(codeEditSpace.Lines[i]);
+			        foreach (var higlight in higlights)
+			        {
+				        var startPos = codeEditSpace.GetFirstCharIndexFromLine(i);
+				        Select(codeEditSpace, startPos + higlight.StartPosition,
+					        higlight.EndPosition - higlight.StartPosition, higlight.Color);
+			        }
+			        //}, null);
+		        }
+	        //});
+	        }
+			codeEditSpace.SelectionStart = selectionStart;
+	        codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
+			codeEditSpace.SelectionLength = selectionLength;
 
         }
 
+		private void Select(System.Windows.Forms.RichTextBox codeEditSpace, int start, int length, Color color)
+		{
+			codeEditSpace.SelectionStart = start;
+			codeEditSpace.SelectionLength = length;
+			codeEditSpace.SelectionColor = color;
+		}
 
 		#endregion
 

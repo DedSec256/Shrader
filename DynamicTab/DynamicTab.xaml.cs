@@ -74,6 +74,8 @@ namespace DynamicTab
             {
                 // add controls to tab item, this case I added just a textbox
                 var rtb = new System.Windows.Forms.RichTextBox();
+	            rtb.DetectUrls = false;
+	            rtb.AutoWordSelection = true;
 	            rtb.ReadOnly = false;
                 rtb.TextChanged += Rtb_TextChanged;
                 var tab = (item as TabItem);
