@@ -10,6 +10,10 @@
         xmlns:opentk="clr-namespace:OpenTK;assembly=OpenTK.GLControl" ResizeMode="CanMinimize"
         mc:Ignorable="d"
         Title="Shrader" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    <Window.InputBindings>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveCommand}"/>
+        <KeyBinding Key="C" Modifiers="Ctrl"  Command="{Binding CreateFileCommand}"/>
+    </Window.InputBindings>
     <Grid>
         <!--#region Grid Definition-->
         <Grid.ColumnDefinitions>
@@ -41,7 +45,9 @@
 
         <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}"/>
 
-        <dt:CustomDynamicTab x:Name="DynamicTab" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent"/>
+        <dt:CustomDynamicTab x:Name="DynamicTab" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
+                             TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent">
+        </dt:CustomDynamicTab>
 
 
     </Grid>
