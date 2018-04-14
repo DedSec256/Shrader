@@ -43,8 +43,6 @@ namespace Shrader.IDE.View
             if (codeEditSpace == null)
                 return;
 
-	        var backColor = codeEditSpace.SelectionBackColor;
-			codeEditSpace.SelectionBackColor = codeEditSpace.BackColor;
 		        //if int a = 0.0 return 2;
 
 		    var higlights = SyntaxHighlighter.Parse(codeEditSpace.Text);
@@ -58,7 +56,6 @@ namespace Shrader.IDE.View
 	        }
 	        codeEditSpace.SelectionStart = selectionStart;
 	        codeEditSpace.SelectionLength = selectionLength;
-	        codeEditSpace.SelectionBackColor = backColor;
 
         }
 
