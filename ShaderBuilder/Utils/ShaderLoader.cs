@@ -10,6 +10,8 @@ namespace ShaderBuilder
 {
     public class ShaderLoader
     {
+        private static int vertexShader = 0, fragmentShader = 0;
+
         public static bool InitShaders(string fShaderSource, out int program)
         {
             string vShaderSource =
@@ -42,10 +44,19 @@ namespace ShaderBuilder
             }
         }
 
+        public static void DeleteShaders()
+        {
+            if (vertexShader != 0)
+                GL.DeleteShader(vertexShader);
+
+            if (fragmentShader != 0)
+                GL.DeleteShader(fragmentShader);
+        }
+
         private static int CreateProgram(string vShader, string fShader)
         {
-            int vertexShader = LoadShader(ShaderType.VertexShader, vShader);
-            int fragmentShader = LoadShader(ShaderType.FragmentShader, fShader);
+            vertexShader = LoadShader(ShaderType.VertexShader, vShader);
+            fragmentShader = LoadShader(ShaderType.FragmentShader, fShader);
             if (vertexShader == 0 || fragmentShader == 0)
             {
                 return 0;
