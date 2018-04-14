@@ -59,6 +59,9 @@ namespace Shrader.IDE.ViewModel
         #endregion
 
         #region Constructor
+
+        private const string FILTER = "(*.GLSL)|*.GLSL";
+
         public MainWindowViewModel(GLControl RenderCanvas, CustomDynamicTab DynamicTab)
         {
             GLControl = RenderCanvas;
@@ -68,7 +71,7 @@ namespace Shrader.IDE.ViewModel
                 var dialog = new SaveFileDialog
                 {
                     DefaultExt = ".glsl",
-                    Filter = "(*.GLSL)|*.GLSL"
+                    Filter = FILTER
                 };
                 if (dialog.ShowDialog() == true)
                 {
@@ -81,7 +84,7 @@ namespace Shrader.IDE.ViewModel
             {
                 var dialog = new OpenFileDialog
                 {
-                    Filter = "(*.GLSL)|*.GLSL",
+                    Filter = FILTER,
                     CheckFileExists = true,
                     Multiselect = true
                 };
