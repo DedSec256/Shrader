@@ -9,7 +9,7 @@
         xmlns:dt="clr-namespace:DynamicTab;assembly=DynamicTab"
         xmlns:opentk="clr-namespace:OpenTK;assembly=OpenTK.GLControl" ResizeMode="CanMinimize"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Shrader" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
         <!--#region Grid Definition-->
         <Grid.ColumnDefinitions>
