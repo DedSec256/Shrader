@@ -146,8 +146,8 @@
     <Compile Include="Tools\UIExtensions.cs" />
     <Compile Include="Tools\VideoSaver\VideoShaderRecorder.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="View\FullScreenRenderPage.xaml.cs">
-      <DependentUpon>FullScreenRenderPage.xaml</DependentUpon>
+    <Compile Include="View\FullScreenRenderWindow.xaml.cs">
+      <DependentUpon>FullScreenRenderWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -155,7 +155,7 @@
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="View\FullScreenRenderPage.xaml">
+    <Page Include="View\FullScreenRenderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

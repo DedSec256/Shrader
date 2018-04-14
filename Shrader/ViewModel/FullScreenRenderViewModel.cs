@@ -17,12 +17,12 @@ namespace Shrader.IDE.ViewModel
         /// </summary>
         public ICommand ExitCommand { get; set; }
 
-        public FullScreenRenderViewModel()
+        public FullScreenRenderViewModel(Action close)
         {         
             
             ExitCommand = new RelayCommand((obj) =>
             {
-                IoC.IoC.MainWindowViewModel.GoToPage(ApplicationPage.Main);
+                close();
             });
         }
     }

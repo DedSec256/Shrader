@@ -1,5 +1,5 @@
-﻿using OpenTK.Graphics;
-using Shrader.IDE.Compilation;
+﻿using Shrader.IDE.Compilation;
+using Shrader.IDE.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,35 +12,29 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Shrader.IDE.View
 {
     /// <summary>
-    /// Логика взаимодействия для FullScreenRenderPage.xaml
+    /// Логика взаимодействия для Full.xaml
     /// </summary>
-    public partial class FullScreenRenderPage : Page
+    public partial class FullScreenRenderWindow : Window
     {
-        
-
-        public FullScreenRenderPage()
+        public FullScreenRenderWindow(Action action)
         {
-            
+            OpenTK.Toolkit.Init();
             InitializeComponent();
 
+            DataContext = new FullScreenRenderViewModel(()=>Close());
 
-
-            DataContext = new FullScreenRenderPage();
-
-            OpenTK.Toolkit.Init();
+            action();
         }
-
 
         #region Render part
 
-        private const int TICK_PERIOD = 1000;
+        private const int TICK_PERIOD = 10;
 
         private void WindowsFormsHost_Initialized(object sender, EventArgs e)
         {

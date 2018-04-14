@@ -168,8 +168,13 @@ namespace Shrader.IDE.ViewModel
             FullscreenCommand = new RelayCommand((obj) =>
             {
                 StopCommand.Execute(null);
-                RenderCanvas.Dispose();
-                IoC.IoC.MainWindowViewModel.CurrentPage = DataModels.ApplicationPage.View;
+                RenderCanvas.Enabled = false;
+                var full = new FullScreenRenderWindow(()=>RunCommand.Execute(null));
+                full.ShowDialog();
+                RenderCanvas.Enabled = true;
+                RenderCanvas.Invalidate();
+                RenderCanvas.MakeCurrent();
+                
             });
 
             StartRecordCommand = new RelayCommand((obj) =>
