@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using MahApps.Metro.Controls;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Shrader.IDE.Tools;
 using Shrader.IDE.Tools.VideoSaver;
 
 namespace Shrader.IDE.View
@@ -39,54 +40,9 @@ namespace Shrader.IDE.View
 		private void DynamicTab_TextChangedRichTextBoxEvent(object sender, EventArgs e)
 		{
 			var codeEditSpace = sender as System.Windows.Forms.RichTextBox;
-			if (codeEditSpace == null)
-				return;
 
-			codeEditSpace.Enabled = false;
-
-			int selectionStart = codeEditSpace.SelectionStart;
-
-			if (codeEditSpace.Lines.Length == 0)
-			{
-				var higlights = SyntaxHighlighter.Parse(codeEditSpace.Text);
-				foreach (var higlight in higlights)
-				{
-					Select(codeEditSpace, higlight.StartPosition,
-						higlight.EndPosition - higlight.StartPosition,
-						higlight.Color);
-				}
-			}
-			else
-			{
-				//using (var writer = new StreamWriter("log.txt"))
-			//	{
-					for (int i = 0; i < codeEditSpace.Lines.Length; i++)
-					{
-						var higlights = SyntaxHighlighter.Parse(codeEditSpace.Lines[i]);
-						foreach (var higlight in higlights)
-						{
-
-						//	writer.WriteLine(
-							//	$"{higlight.Key} - {higlight.Color.A};  {higlight.Color.R}; {higlight.Color.B}; {higlight.Color.G}");
-
-							var startPos = codeEditSpace.GetFirstCharIndexFromLine(i);
-							Select(codeEditSpace, startPos + higlight.StartPosition,
-								higlight.EndPosition - higlight.StartPosition, higlight.Color);
-						}
-					}
-				//}
-				codeEditSpace.Select(selectionStart, 0);
-			}
-            codeEditSpace.Enabled = true;
-            codeEditSpace.Focus();
+			codeEditSpace?.LoadHighlightinngs();
 		}
-
-		private void Select(System.Windows.Forms.RichTextBox codeEditSpace, int start, int length, Color color)
-		{
-			codeEditSpace.Select(start, length);
-			codeEditSpace.SelectionColor = color;
-		}
-
         #endregion
 
         #region Render part

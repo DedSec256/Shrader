@@ -114,6 +114,7 @@
     <Compile Include="Compilation\StaticShaderBuilder.cs" />
     <Compile Include="Compilation\StaticShaderLinker.cs" />
     <Compile Include="Tools\SyntaxHighlighter\SyntaxHighlighter.cs" />
+    <Compile Include="Tools\UIExtensions.cs" />
     <Compile Include="Tools\VideoSaver\VideoShaderRecorder.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="View\SettingsWindow.xaml.cs">
