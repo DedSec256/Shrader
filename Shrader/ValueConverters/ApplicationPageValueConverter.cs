@@ -20,9 +20,6 @@ namespace Shrader.IDE.ValueConverters
                 case ApplicationPage.Main:
                     return IoC.IoC.MainPage;
 
-                case ApplicationPage.View:
-                    return new FullScreenRenderPage();
-
                 default:
                     Debugger.Break();
                     return null;

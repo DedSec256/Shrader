@@ -8,7 +8,6 @@ namespace Shrader.IDE.DataModels
 {
     public enum ApplicationPage
     {
-        Main = 0,
-        View = 1
+        Main = 0
     }
 }

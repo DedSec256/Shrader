@@ -1,0 +1,20 @@
+﻿<Window x:Class="Shrader.IDE.View.FullScreenRenderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:opentk="clr-namespace:OpenTK;assembly=OpenTK.GLControl"
+        xmlns:local="clr-namespace:Shrader.IDE.View"
+        mc:Ignorable="d"
+        Title="Full" Height="450" Width="800">
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="{Binding ExitCommand}"/>
+    </Window.InputBindings>
+    <Grid>
+        
+        <WindowsFormsHost Grid.Row="1"  Initialized="WindowsFormsHost_Initialized">
+
+            <opentk:GLControl x:Name="RenderCanvas" Load="RenderCanvas_Load" Paint="RenderCanvas_Paint" />
+        </WindowsFormsHost>
+    </Grid>
+</Window>
