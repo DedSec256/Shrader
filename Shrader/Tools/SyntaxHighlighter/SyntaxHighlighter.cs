@@ -47,7 +47,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 					Color funcColor = Color.FromArgb(255, 0, 20, 250);
 
 					string[] types = {"int", "float", "vec3", "vec2", "vec4", "mat3", };
-					string[] keywords = {"return", "if", "else", "for", "out", "break", "in", "const", "inout", "sign", "normalize", "clamp", "step", "smoothstep", "mix", "pow", "reflect" };
+					string[] keywords = {"return", "if", "else", "for", "out", "break", "in", "const", "inout", "sign", "normalize", "clamp", "step", "smoothstep", "mix", "pow", "reflect", "texture" };
 					string[] funcs = { "cos", "sin", "fract", "dot", "max", "abs", "length", "floor", "min", "mod", };
 
 					SyntaxKeyword[] syntaxStandarts = 
@@ -97,11 +97,12 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 		{
 			private States State = States.Default;
 			private readonly List<HiglightArea> _areas = new List<HiglightArea>();
+			private const string DEFAULT = "[default]";
 			public IEnumerable<HiglightArea> Parse(string text, Dictionary<string, SyntaxKeyword> keywords)
 			{
 				int index = 0;
 				int startPosition = 0;
-				States lastState = States.Default;
+				string lastState = DEFAULT;
 				StringBuilder buffer = new StringBuilder();
 				char lastS = '\t';
 
@@ -133,7 +134,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 							}
 							else if ((Char.IsPunctuation(s) || Char.IsSeparator(s)) && s != '/')
 							{
-								lastState = States.Symbol;
+								lastState = States.Symbol.ToString();
 							}
 							else if (Char.IsDigit(s))
 							{
@@ -144,54 +145,48 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 						}
 						case States.Text:
 						{
-							if (s is '\"') lastState = States.Text;
+							if (s is '\"') lastState = States.Text.ToString();
 							break;
 						}
 						case States.Comment:
 						{
-							if (s is '\n' || s is '\r') lastState = States.Comment;
+							if (s is '\n' || s is '\r') lastState = States.Comment.ToString();
 							break;
 						}
 						case States.Keyword:
 						{
 							if (!Char.IsLetterOrDigit(s))
 							{
-								if (keywords.TryGetValue(buffer.ToString(), out var value))
-								{
-									_areas.Add(new HiglightArea()
-									{
-										StartPosition = startPosition,
-										EndPosition = index,
-										Color = value.Color
-									});
-								}
-								State = lastState = States.Default;
-								break;
+								lastState = buffer.ToString();
 							}
-							buffer.Append(s);
+							else buffer.Append(s);
 							break;
 						}
 						case States.Digit:
 						{
-							if (!(Char.IsDigit(s) || s == '.' || s == ',')) //тут точно баг
-								lastState = States.Digit;
+							if (!(Char.IsDigit(s) || s == '.' || s == ',')) 
+								lastState = States.Digit.ToString();
 							break;
 						}
 						case States.Preprocessor:
 						{
-							if (s == '\n' || s == '\r') lastState = States.Preprocessor;
+							if (s == '\n' || s == '\r') lastState = States.Preprocessor.ToString();
 							break;
 						}
 					}
-					if (lastState != States.Default)
+					if (lastState != DEFAULT)
 					{
-						_areas.Add(new HiglightArea()
+						if (keywords.TryGetValue(lastState, out var value))
 						{
-							StartPosition = startPosition,
-							EndPosition = index,
-							Color = keywords[lastState.ToString()].Color
-						});
-						State = lastState = States.Default;
+							_areas.Add(new HiglightArea()
+							{
+								StartPosition = startPosition,
+								EndPosition = index,
+								Color = value.Color
+							});
+						}
+						State = States.Default;
+						lastState = DEFAULT;
 					}
 					++index;
 					lastS = s;
