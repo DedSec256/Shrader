@@ -44,7 +44,7 @@ namespace DynamicTab
         #endregion
 
 
-        public event EventHandler<TextChangedEventArgs> TextChangedRichTextBoxEvent;
+        public event EventHandler<EventArgs> TextChangedRichTextBoxEvent;
 
         public CustomDynamicTab()
         {
@@ -72,7 +72,7 @@ namespace DynamicTab
             foreach (var item in e.NewItems)
             {
                 // add controls to tab item, this case I added just a textbox
-                var rtb = new RichTextBox();
+                var rtb = new System.Windows.Forms.RichTextBox();
                 rtb.TextChanged += Rtb_TextChanged;
                 var tab = (item as TabItem);
                 tab.HeaderTemplate = tabDynamic.FindResource("TabHeader") as DataTemplate;
@@ -80,7 +80,7 @@ namespace DynamicTab
             }
         }
 
-        private void Rtb_TextChanged(object sender, TextChangedEventArgs e)
+        private void Rtb_TextChanged(object sender, EventArgs e)
         {
             TextChangedRichTextBoxEvent?.Invoke(sender, e);
         }

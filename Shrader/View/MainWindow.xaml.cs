@@ -38,7 +38,7 @@ namespace Shrader.IDE.View
 
         #region Highlight part
 
-        private async void DynamicTab_TextChangedRichTextBoxEvent(object sender, TextChangedEventArgs e)
+        private async void DynamicTab_TextChangedRichTextBoxEvent(object sender, EventArgs e)
         {
             var codeEditSpace = sender as RichTextBox;
             if (codeEditSpace == null)
