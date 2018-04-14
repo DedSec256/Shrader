@@ -103,7 +103,7 @@ namespace Shrader.IDE.ViewModel
                 Logger _logger = Logger.Instance;
                 _logger.ClearMessages();
 
-                //SaveInFiles(TabItems)
+                SaveInFiles(TabItems);
                 //StaticShaderBuilder.RenderShader(GetTabFilesPath());
 
                 StaticShaderBuilder.RenderShader(GetTabFilesPath());

@@ -10,7 +10,7 @@ namespace Shrader.IDE.Compilation
 	internal static class StaticShaderLinker
 	{
 		static Logger _logger = Logger.Instance;
-		static readonly Regex Regex = new Regex("#include \"([\\W\\w]+.glsl)\"");
+		static readonly Regex Regex = new Regex("#include \"([\\W|\\w]+?\\.glsl)\"");
 
 		private static void LincRec(string nameOfFile, int level, Dictionary<string, int> links)
 		{
