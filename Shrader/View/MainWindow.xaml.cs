@@ -1,6 +1,7 @@
 ﻿using Shrader.IDE.ViewModel;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using Shrader.IDE.Tools.SyntaxHighlighter;
@@ -8,6 +9,9 @@ using Shrader.IDE.Tools.SyntaxHighlighter;
 using Shrader.IDE.Compilation;
 using System.Windows.Threading;
 using MahApps.Metro.Controls;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using Shrader.IDE.Tools.VideoSaver;
 
 namespace Shrader.IDE.View
 {
@@ -38,11 +42,9 @@ namespace Shrader.IDE.View
 			if (codeEditSpace == null)
 				return;
 
-            codeEditSpace.Enabled = false;
+			codeEditSpace.Enabled = false;
 
-			codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
 			int selectionStart = codeEditSpace.SelectionStart;
-			int selectionLength = codeEditSpace.SelectionLength;
 
 			if (codeEditSpace.Lines.Length == 0)
 			{
@@ -55,22 +57,26 @@ namespace Shrader.IDE.View
 				}
 			}
 			else
-			{				
-				for (int i = 0; i < codeEditSpace.Lines.Length; i++)
-				{
-					var higlights = SyntaxHighlighter.Parse(codeEditSpace.Lines[i]);
-					foreach (var higlight in higlights)
+			{
+				//using (var writer = new StreamWriter("log.txt"))
+			//	{
+					for (int i = 0; i < codeEditSpace.Lines.Length; i++)
 					{
-						var startPos = codeEditSpace.GetFirstCharIndexFromLine(i);
-						Select(codeEditSpace, startPos + higlight.StartPosition,
-							higlight.EndPosition - higlight.StartPosition, higlight.Color);
-					}
-					
-				}
-				codeEditSpace.Select(selectionStart, selectionLength);
-				codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
-			}
+						var higlights = SyntaxHighlighter.Parse(codeEditSpace.Lines[i]);
+						foreach (var higlight in higlights)
+						{
 
+						//	writer.WriteLine(
+							//	$"{higlight.Key} - {higlight.Color.A};  {higlight.Color.R}; {higlight.Color.B}; {higlight.Color.G}");
+
+							var startPos = codeEditSpace.GetFirstCharIndexFromLine(i);
+							Select(codeEditSpace, startPos + higlight.StartPosition,
+								higlight.EndPosition - higlight.StartPosition, higlight.Color);
+						}
+					}
+				//}
+				codeEditSpace.Select(selectionStart, 0);
+			}
             codeEditSpace.Enabled = true;
             codeEditSpace.Focus();
 		}
@@ -104,20 +110,41 @@ namespace Shrader.IDE.View
         private static object lockToken = new object();
         private void Timer_Tick(object sender, EventArgs e)
         {
-            lock (lockToken)
-            {
-                if (isExecute == true)
-                    return; 
-            }
-            isExecute = true;
+            //lock (lockToken)
+            //{
+            //    if (isExecute == true)
+            //        return; 
+            //}
+            //isExecute = true;
             RenderCanvas.Invalidate();
-            isExecute = false;
+            //isExecute = false;
         }
 
         private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
             StaticShaderBuilder.Paint(RenderCanvas);
+	        if (VideoShaderRecorder.IsRecording)
+	        {
+		        if (!VideoShaderRecorder.AddImage(GrabScreenshot(RenderCanvas)))
+		        {
+			        VideoShaderRecorder.CreateMovie("bestMovieEver.mp4");
+			        VideoShaderRecorder.StopRecord();
+		        }
+	        }
         }
+
+	    static Bitmap GrabScreenshot(GLControl control)
+	    {
+		    Bitmap bmp = new Bitmap(control.ClientSize.Width, control.ClientSize.Height);
+		    System.Drawing.Imaging.BitmapData data =
+			    bmp.LockBits(control.ClientRectangle, System.Drawing.Imaging.ImageLockMode.WriteOnly,
+				    System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+		    GL.ReadPixels(0, 0, control.ClientSize.Width, control.ClientSize.Height, PixelFormat.Bgr, PixelType.UnsignedByte,
+			    data.Scan0);
+		    bmp.UnlockBits(data);
+		    bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+		    return bmp;
+	    }
 
 		#endregion
 	}
