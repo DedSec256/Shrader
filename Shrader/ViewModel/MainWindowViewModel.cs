@@ -142,12 +142,12 @@ namespace Shrader.IDE.ViewModel
             return tab;
         }
 
-        private static TabItem CreateTabItem(string name)
+        private TabItem CreateTabItem(string name)
         {
             return new TabItem
             {
                 Header = name,
-                Name = Path.GetFileNameWithoutExtension(name)
+                Name = "tab" + TabItems.Count().ToString()
             };
         } 
 
