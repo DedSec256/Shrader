@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using ShaderBuilder.Utils;
 using Shrader.IDE.Model;
+using Tao.DevIl;
 
 namespace ShaderBuilder
 {
@@ -42,10 +43,67 @@ namespace ShaderBuilder
             private const string UNIFORM_MOUSE = "iMouse";
             private const string UNIFORM_TIME = "iTime";
             private const string UNIFORM_DISPLAY = "iResolution";
+            private const string UNIFORM_TEXTURE = "iTexture";
 
             private int UniformMouse = -1;
             private int UniformTime = -1;
             private int UniformDisplay = -1;
+
+            private static int MakeGlTexture(int Format, IntPtr pixels, int w, int h)
+            {
+                int texObject;
+                GL.GenTextures(1, out texObject); 
+                GL.BindTexture(TextureTarget.Texture2D, texObject);
+
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+
+                switch (Format)
+                {
+                    case (int)PixelFormat.Rgb:
+                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, w, h, 0, PixelFormat.Rgb, PixelType.UnsignedByte, pixels);
+                        break;
+                    case (int)PixelFormat.Rgba:
+                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
+                        break;
+                }  
+                return texObject;
+            }
+
+            private int GetTexture(string texturePath)
+            {
+                string path = String.Copy(texturePath);
+                int imageId, mGlTextureObject = -1;
+                Il.ilInit();
+                Il.ilEnable(Il.IL_ORIGIN_SET);
+
+                Il.ilGenImages(2, out imageId);
+                Il.ilBindImage(imageId);
+
+                if (Il.ilLoadImage(texturePath))
+                {
+                    int width = Il.ilGetInteger(Il.IL_IMAGE_WIDTH);
+                    int height = Il.ilGetInteger(Il.IL_IMAGE_HEIGHT);
+
+                    int bitspp = Il.ilGetInteger(Il.IL_IMAGE_BITS_PER_PIXEL);
+
+                    switch (bitspp) 
+                    {
+                        case 24:
+                            mGlTextureObject = MakeGlTexture((int)PixelFormat.Rgb, Il.ilGetData(), width, height);
+                            break;
+                        case 32:
+                            mGlTextureObject = MakeGlTexture((int)PixelFormat.Rgba, Il.ilGetData(), width, height);
+                            break;
+                    }
+
+                    Il.ilDeleteImages(2, ref imageId);
+                }
+
+                return mGlTextureObject;
+            }
 
             public Uniforms(SettingModel model, int program)
             {
@@ -57,12 +115,29 @@ namespace ShaderBuilder
 
                 if (model.IsViewPort)
                     UniformDisplay = GL.GetUniformLocation(program, UNIFORM_DISPLAY);
+
+                if (model.ImagesPath == null || model.ImagesPath.Count() == 0)
+                    return;
+                string name = model.ImagesPath.First();
+                int id = GetTexture(name);
+                GL.ActiveTexture(TextureUnit.Texture0);
+
+                int texLocation = GL.GetUniformLocation(program, UNIFORM_TEXTURE);
+                GL.Uniform1(texLocation, 0);
             }
 
-            public void UpdateUniforms()
+            public void UpdateUniforms(OpenTK.GLControl control)
             {
                 if (UniformTime != -1)
-                    GL.Uniform1(UniformTime, (float)Environment.TickCount / 1000);
+                    // Time sending in seconds
+                    GL.Uniform1(UniformTime, ((float)Environment.TickCount / 1000)); 
+
+                if (UniformDisplay != -1)
+                    GL.Uniform3(UniformDisplay, (float)control.Width, control.Height, 0);
+
+                if (UniformMouse != -1)
+                    // TODO: Mouse uniforms
+                    GL.Uniform4(UniformMouse, 100, 100, 0, 0);
             }
 
             public void DeleteUniforms()
@@ -160,7 +235,7 @@ namespace ShaderBuilder
 
             if (canDraw)
             {
-                uniforms.UpdateUniforms();
+                uniforms.UpdateUniforms(control);
                 GL.DrawArrays(PrimitiveType.Triangles, 0, nVertices);
             }
 
