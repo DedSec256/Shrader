@@ -18,14 +18,15 @@ using Shrader.IDE.Tools.SyntaxHighlighter;
 using Shrader.IDE.Compilation;
 using System.Threading;
 using System.Windows.Threading;
+using MahApps.Metro.Controls;
 
 namespace Shrader.IDE.View
 {
-	/// <summary>
-	/// Логика взаимодействия для MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
-	{
+    /// <summary>
+    /// Логика взаимодействия для MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : MetroWindow
+    {
 		SynchronizationContext context = SynchronizationContext.Current;
         public MainWindow()
 		{
@@ -48,6 +49,8 @@ namespace Shrader.IDE.View
 			if (codeEditSpace == null)
 				return;
 
+            codeEditSpace.Enabled = false;
+
 			int selectionStart = codeEditSpace.SelectionStart;
 			int selectionLength = codeEditSpace.SelectionLength;
 
@@ -62,13 +65,9 @@ namespace Shrader.IDE.View
 				}
 			}
 			else
-			{
-				// Parallel.For(0, codeEditSpace.Lines.Length, i =>
-				// {
+			{				
 				for (int i = 0; i < codeEditSpace.Lines.Length; i++)
 				{
-					// context.Send(state =>
-					// {
 					var higlights = SyntaxHighlighter.Parse(codeEditSpace.Lines[i]);
 					foreach (var higlight in higlights)
 					{
@@ -76,12 +75,14 @@ namespace Shrader.IDE.View
 						Select(codeEditSpace, startPos + higlight.StartPosition,
 							higlight.EndPosition - higlight.StartPosition, higlight.Color);
 					}
-					// }, null);
-					// });
+					
 				}
 				codeEditSpace.Select(selectionStart, selectionLength);
 				codeEditSpace.SelectionColor = codeEditSpace.ForeColor;
 			}
+
+            codeEditSpace.Enabled = true;
+            codeEditSpace.Focus();
 		}
 
 		private void Select(System.Windows.Forms.RichTextBox codeEditSpace, int start, int length, Color color)

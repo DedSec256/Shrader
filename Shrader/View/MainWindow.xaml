@@ -1,4 +1,4 @@
-﻿<Window x:Class="Shrader.IDE.View.MainWindow"
+﻿<Controls:MetroWindow x:Class="Shrader.IDE.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,6 +8,7 @@
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:dt="clr-namespace:DynamicTab;assembly=DynamicTab"
         xmlns:opentk="clr-namespace:OpenTK;assembly=OpenTK.GLControl" ResizeMode="CanMinimize"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="Shrader" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.InputBindings>
@@ -53,4 +54,4 @@
 
 
     </Grid>
-</Window>
+</Controls:MetroWindow>
