@@ -1,4 +1,5 @@
 ﻿using Ninject;
+using OpenTK;
 using Shrader.IDE.View;
 using Shrader.IDE.ViewModel;
 using System;
@@ -22,7 +23,7 @@ namespace Shrader.IDE.IoC
         public static IKernel Kernel { get; private set; } = new StandardKernel();
 
         /// <summary>
-        /// A shortcut to access the <see cref="WindowViewModel"/>
+        /// A shortcut to access the <see cref="MainWindowViewModel"/>
         /// </summary>
         public static MainWindowViewModel MainWindowViewModel => IoC.Get<MainWindowViewModel>();
         /// <summary>

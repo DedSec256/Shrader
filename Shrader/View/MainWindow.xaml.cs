@@ -19,6 +19,8 @@ namespace Shrader.IDE.View
         public MainWindow()
         {
             InitializeComponent();
+            IoC.IoC.SetupWindow();
+            IoC.IoC.SetupMainPage();
             DataContext = IoC.IoC.MainWindowViewModel;
         }
 

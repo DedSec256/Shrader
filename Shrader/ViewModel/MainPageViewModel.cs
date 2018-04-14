@@ -71,6 +71,10 @@ namespace Shrader.IDE.ViewModel
         /// Stop render command
         /// </summary>
         public ICommand StopCommand { get; set; }
+        /// <summary>
+        /// Command which ellaps fullscreen mode
+        /// </summary>
+        public ICommand FullscreenCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -152,7 +156,14 @@ namespace Shrader.IDE.ViewModel
 
             StopCommand = new RelayCommand((obj) =>
             {
-                //TODO
+                StaticShaderBuilder.StopRender();
+            });
+
+            FullscreenCommand = new RelayCommand((obj) =>
+            {
+                StopCommand.Execute(null);
+                RenderCanvas.Dispose();
+                IoC.IoC.MainWindowViewModel.CurrentPage = DataModels.ApplicationPage.View;
             });
         }
 
