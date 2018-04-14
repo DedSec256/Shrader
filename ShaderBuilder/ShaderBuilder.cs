@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using ShaderBuilder.Utils;
+using Shrader.IDE.Model;
 
 namespace ShaderBuilder
 {
@@ -35,7 +36,46 @@ namespace ShaderBuilder
         /// </summary>
         private int vertexBuffer = 0;
         #endregion
-		private Logger _logger = Logger.Instance;
+
+        private class Uniforms
+        {
+            private const string UNIFORM_MOUSE = "iMouse";
+            private const string UNIFORM_TIME = "iTime";
+            private const string UNIFORM_DISPLAY = "iResolution";
+
+            private int UniformMouse = -1;
+            private int UniformTime = -1;
+            private int UniformDisplay = -1;
+
+            public Uniforms(SettingModel model, int program)
+            {
+                if (model.IsMouse)
+                    UniformMouse = GL.GetUniformLocation(program, UNIFORM_MOUSE);
+
+                if (model.IsTime)
+                    UniformTime = GL.GetUniformLocation(program, UNIFORM_TIME);
+
+                if (model.IsViewPort)
+                    UniformDisplay = GL.GetUniformLocation(program, UNIFORM_DISPLAY);
+            }
+
+            public void UpdateUniforms()
+            {
+                if (UniformTime != -1)
+                    GL.Uniform1(UniformTime, (float)DateTime.Now.Second);
+            }
+
+            public void DeleteUniforms()
+            {
+                UniformTime = -1;
+                UniformMouse = -1;
+                UniformDisplay = -1;
+            }
+        }
+
+        private Uniforms uniforms;
+
+        private Logger _logger = Logger.Instance;
         /// <summary>
         /// Standart constructor
         /// </summary>
@@ -73,7 +113,7 @@ namespace ShaderBuilder
         /// <summary>
         /// Main function in this program, render shader with his file name
         /// </summary>
-        public void RenderShader(string nameOfShaderFile)
+        public void RenderShader(string nameOfShaderFile, SettingModel model)
         {
             string fShaderSource = null;
             ShaderLoader.LoadShader(nameOfShaderFile, out fShaderSource);
@@ -95,6 +135,8 @@ namespace ShaderBuilder
                 _logger.WritePosError();
                 return;
             }
+
+            uniforms = new Uniforms(model, program);
 
             GL.ClearColor(Color.DarkSlateBlue);
             canDraw = true;
@@ -118,6 +160,7 @@ namespace ShaderBuilder
 
             if (canDraw)
             {
+                uniforms.UpdateUniforms();
                 GL.DrawArrays(PrimitiveType.Triangles, 0, nVertices);
             }
 
@@ -134,6 +177,9 @@ namespace ShaderBuilder
             GL.DeleteBuffer(vertexBuffer);
             ShaderLoader.DeleteShaders();
             GL.ClearColor(Color.DarkSlateBlue);
+
+            if (uniforms != null)
+                uniforms.DeleteUniforms();
             canDraw = false;
         }
     }

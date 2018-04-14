@@ -124,11 +124,8 @@ namespace Shrader.IDE.ViewModel
                 StaticShaderBuilder.StopRender();
 
                 SaveInFiles(TabItems);
-                //StaticShaderBuilder.RenderShader(GetTabFilesPath());
 
-                StaticShaderBuilder.RenderShader(GetTabFilesPath());
-                StaticShaderBuilder.Paint(RenderCanvas);
-
+                StaticShaderBuilder.RenderShader(GetTabFilesPath(), SettingModel);
                 ErrorText = _logger.GetAllMessage();
             });
 

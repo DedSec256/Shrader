@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Shrader.IDE.Model;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Shrader.IDE.Compilation
@@ -16,7 +17,7 @@ namespace Shrader.IDE.Compilation
             shaderBuilder.Paint(control);
         }
 
-        public static void RenderShader(IEnumerable<string> namesOfShaderFile)
+        public static void RenderShader(IEnumerable<string> namesOfShaderFile, SettingModel model)
         {
             using (StreamWriter sr = new StreamWriter(EXECUTE_PATH, false))
             {
@@ -25,7 +26,7 @@ namespace Shrader.IDE.Compilation
             }
 
             StaticShaderLinker.LinkSources(namesOfShaderFile, EXECUTE_PATH);
-            shaderBuilder.RenderShader(EXECUTE_PATH);
+            shaderBuilder.RenderShader(EXECUTE_PATH, model);
         }
 
         public static void Resize(OpenTK.GLControl control)

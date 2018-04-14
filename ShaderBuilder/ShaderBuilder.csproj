@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\SettingModel.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="ShaderBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
