@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 using Newtonsoft.Json;
 
 namespace Shrader.IDE.Tools.SyntaxHighlighter
@@ -95,9 +95,13 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 			return syntaxKeywords;
 		}
 
-		public static Task<IEnumerable<HiglightArea>> Parse(string text)
+		public static IEnumerable<HiglightArea> Parse(string text)
 		{
-				return Task.Run(() => new StatesMachine().Parse(text, Keywords));
+			return new StatesMachine().Parse(text, Keywords);
+		}
+		public static Task<IEnumerable<HiglightArea>> ParseAsync(string text)
+		{
+			return Task.Run(() => new StatesMachine().Parse(text, Keywords));
 		}
 
 		private class StatesMachine
@@ -173,7 +177,7 @@ namespace Shrader.IDE.Tools.SyntaxHighlighter
 						}
 						case States.Digit:
 						{
-							if (!(Char.IsDigit(s) || s == '.' || s == ',')) 
+							if (!(Char.IsDigit(s) || s == '.')) 
 								lastState = States.Digit.ToString();
 							break;
 						}

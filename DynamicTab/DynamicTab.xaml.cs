@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -73,10 +74,15 @@ namespace DynamicTab
             {
                 // add controls to tab item, this case I added just a textbox
                 var rtb = new System.Windows.Forms.RichTextBox();
+	            rtb.ReadOnly = false;
                 rtb.TextChanged += Rtb_TextChanged;
                 var tab = (item as TabItem);
                 tab.HeaderTemplate = tabDynamic.FindResource("TabHeader") as DataTemplate;
-                tab.Content = rtb;
+	            var formsHost = new WindowsFormsHost();
+	            formsHost.Child = rtb;
+	            tab.Content = formsHost;
+				//tab.Content = rtb;
+				
             }
         }
 
@@ -89,13 +95,13 @@ namespace DynamicTab
         {
             string tabName = (sender as Button).CommandParameter.ToString();
 
-            var item = tabDynamic.Items.Cast<TabItem>().Where(i => i.Name.Equals(tabName)).SingleOrDefault();
+            var item = tabDynamic.Items.Cast<TabItem>().SingleOrDefault(i => i.Name.Equals(tabName));
 
             TabItem tab = item as TabItem;
 
             if (tab != null)
             {
-                if (MessageBox.Show(string.Format("Are you sure you want to remove the tab '{0}'?", tab.Header.ToString()),
+                if (MessageBox.Show($"Are you sure you want to remove the tab '{tab.Header.ToString()}'?",
                     "Remove Tab", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     // get selected tab
