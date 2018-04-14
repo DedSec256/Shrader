@@ -46,7 +46,8 @@
         <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}"/>
 
         <dt:CustomDynamicTab x:Name="DynamicTab" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
-                             TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent"/>
+                             TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent">
+        </dt:CustomDynamicTab>
 
 
     </Grid>

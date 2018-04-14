@@ -36,7 +36,7 @@ namespace Shrader.IDE.ViewModel
         public ObservableCollection<TabItem> TabItems { get; set; }
     #endregion
 
-    #region Commands
+        #region Commands
     /// <summary>
     /// Command for run shaders
     /// </summary>
@@ -93,6 +93,8 @@ namespace Shrader.IDE.ViewModel
 
             RunCommand = new RelayCommand((obj) =>
             {
+                //SaveInFiles(TabItems)
+                //StaticShaderBuilder.RenderShader(GetTabFilesPath());
                 StaticShaderBuilder.RenderShader(new []{ "a.glsl", "b.glsl", "c.glsl", "d.glsl"});
             });
 
@@ -101,16 +103,7 @@ namespace Shrader.IDE.ViewModel
                 if (DynamicTab.SelectedItem == null)
                     return;
                 var tab = DynamicTab.SelectedItem as TabItem;
-                var path = tab.Header.ToString();
-                using (var file = File.Open(path, FileMode.CreateNew))
-                {
-                    using (var writer = new StreamWriter(file))
-                    {
-                        var rtb = tab.Content as RichTextBox;
-                        var text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-                        writer.Write(text);
-                    }
-                }                   
+                SaveInFiles(new TabItem[] { tab });                   
             });
         }
 
@@ -136,6 +129,23 @@ namespace Shrader.IDE.ViewModel
         {
             return from t in TabItems
                    select t.Header.ToString();
+        }
+
+        private void SaveInFiles(IEnumerable<TabItem> tabs)
+        {
+            foreach (var tab in tabs)
+            {
+                var path = tab.Header.ToString();
+                using (var file = File.Open(path, FileMode.CreateNew))
+                {
+                    using (var writer = new StreamWriter(file))
+                    {
+                        var rtb = tab.Content as RichTextBox;
+                        var text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                        writer.Write(text);
+                    }
+                }
+            }
         }
         #endregion
 
