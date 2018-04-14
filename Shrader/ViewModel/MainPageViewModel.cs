@@ -16,6 +16,7 @@ using System;
 using System.Windows.Forms.Integration;
 using Shrader.IDE.Model;
 using Shrader.IDE.View;
+using Shrader.IDE.Tools.VideoSaver;
 
 namespace Shrader.IDE.ViewModel
 {
@@ -75,6 +76,10 @@ namespace Shrader.IDE.ViewModel
         /// Command which ellaps fullscreen mode
         /// </summary>
         public ICommand FullscreenCommand { get; set; }
+        /// <summary>
+        /// Start recording video command
+        /// </summary>
+        public ICommand StartRecordCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -134,7 +139,7 @@ namespace Shrader.IDE.ViewModel
                 SaveInFiles(TabItems);
                 //StaticShaderBuilder.RenderShader(GetTabFilesPath());
 
-                StaticShaderBuilder.RenderShader(GetTabFilesPath());
+                StaticShaderBuilder.RenderShader(GetTabFilesPath(), SettingModel);
                 StaticShaderBuilder.Paint(RenderCanvas);
 
                 ErrorText = _logger.GetAllMessage();
@@ -164,6 +169,11 @@ namespace Shrader.IDE.ViewModel
                 StopCommand.Execute(null);
                 RenderCanvas.Dispose();
                 IoC.IoC.MainWindowViewModel.CurrentPage = DataModels.ApplicationPage.View;
+            });
+
+            StartRecordCommand = new RelayCommand((obj) =>
+            {
+                VideoShaderRecorder.StartRecord();
             });
         }
 

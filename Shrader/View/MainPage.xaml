@@ -41,6 +41,8 @@
             <MenuItem Header="Pause" Click="MenuItem_PauseClick"/>
             <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}"/>
             <MenuItem Header="FullScreen" Command="{Binding FullscreenCommand}"/>
+            <MenuItem Header="Record" Command="{Binding StartRecordCommand}"/>
+
         </Menu>
 
 

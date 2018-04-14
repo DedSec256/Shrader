@@ -138,7 +138,6 @@
     <Compile Include="Compilation\StaticShaderLinker.cs" />
     <Compile Include="DataModels\ApplicationPage.cs" />
     <Compile Include="IoC\IoC.cs" />
-    <Compile Include="Model\SettingModel.cs" />
     <Compile Include="Tools\SyntaxHighlighter\SyntaxHighlighter.cs" />
     <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
