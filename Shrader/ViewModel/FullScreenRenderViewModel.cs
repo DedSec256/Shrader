@@ -18,8 +18,7 @@ namespace Shrader.IDE.ViewModel
         public ICommand ExitCommand { get; set; }
 
         public FullScreenRenderViewModel(Action close)
-        {         
-            
+        {          
             ExitCommand = new RelayCommand((obj) =>
             {
                 close();
