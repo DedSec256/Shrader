@@ -64,7 +64,7 @@ namespace Shrader.IDE.View
             isExecute = false;
         }
 
-        private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+        public void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
             StaticShaderBuilder.Paint(RenderCanvas);
         }

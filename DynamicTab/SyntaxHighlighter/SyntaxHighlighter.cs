@@ -106,7 +106,7 @@ namespace DynamicTab.SyntaxHighlighter
 		private class StatesMachine
 		{
 			private States _state = States.Default;
-			private readonly List<HiglightArea> _areas = new List<HiglightArea>(1000);
+			private readonly List<HiglightArea> _areas = new List<HiglightArea>(400);
 			private HashSet<char> Symbols = new HashSet<char>() {',', '{', '}', '(', '[', ']', ')', '%', ';'};
 
 			private const string DEFAULT = "[d]";
