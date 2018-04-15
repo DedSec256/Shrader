@@ -81,20 +81,12 @@ namespace DynamicTab
 	            };
 	         
 	            rtb.TextChanged += Rtb_TextChanged;
-				rtb.GotFocus += Rtb_GotFocus;
                 var tab = (item as TabItem);
                 tab.HeaderTemplate = tabDynamic.FindResource("TabHeader") as DataTemplate;
 	            var formsHost = new WindowsFormsHost {Child = rtb};
 	            tab.Content = formsHost;				
             }
         }
-
-		private void Rtb_GotFocus(object sender, EventArgs e)
-		{
-			var rtb = sender as System.Windows.Forms.RichTextBox;
-			rtb.LoadHighlightinngs();
-			rtb.GotFocus -= Rtb_GotFocus;
-		}
 
 		private void Rtb_TextChanged(object sender, EventArgs e)
         {
