@@ -70,7 +70,7 @@ namespace ShaderBuilder.Utils
 		public string GetAllMessage()
         {
             if (_messages == "")
-                return "OK!";
+                return "Linking...Done.\nCompiling...Done.";
             else
                 return _messages;
         }
