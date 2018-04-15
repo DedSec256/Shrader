@@ -162,14 +162,16 @@ namespace Shrader.IDE.ViewModel
                     }
                     else
                     {
-                        Dictionary<string, int> solution = new Dictionary<string, int>();
                         foreach (var name in dialog.FileNames)
-                            StaticShaderLinker.LincRec(name, 0, solution);
-                        foreach (var source in solution)
                         {
-                            var tab = AddToTabItems(source.Key);
-                            if (tab != null)
-                                FilledTab(tab, source.Key);
+                            Dictionary<string, int> solution = new Dictionary<string, int>();
+                            StaticShaderLinker.LincRec(name, 0, solution);
+                            foreach (var source in solution)
+                            {
+                                var tab = AddToTabItems(source.Key);
+                                if (tab != null)
+                                    FilledTab(tab, source.Key);
+                            }
                         }
                     }
                 }

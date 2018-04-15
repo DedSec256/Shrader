@@ -11,7 +11,7 @@ namespace Shrader.IDE.Compilation
 	{
 		static Logger _logger = Logger.Instance;
 		static readonly Regex Include = new Regex("#include \"([\\W|\\w]+?\\.glsl)\"");
-		static readonly Regex Main = new Regex("int main\\(\\)");
+		static readonly Regex Main = new Regex("void main\\(\\)");
 
 		public static void LincRec(string nameOfFile, int level, Dictionary<string, int> links)
 		{
@@ -68,7 +68,7 @@ namespace Shrader.IDE.Compilation
 					}
 				}
 			}
-			throw new FileNotFoundException("int main() not found");
+			throw new FileNotFoundException("void main() not found");
 		}
 	}
 }
