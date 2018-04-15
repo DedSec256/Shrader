@@ -38,11 +38,41 @@
                 <MenuItem Header="Save" Command="{Binding SavePrjCommand}"/>
             </MenuItem>
             <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}"/>
-            <MenuItem Header="Tools"></MenuItem>
-            <MenuItem Header="FullScreen" Command="{Binding FullscreenCommand}"/>
-            <MenuItem Header="RecordCommand" Command="{Binding StartRecordCommand}"/>
-            <MenuItem Margin="550 0 0 0" Header="Start" Command="{Binding RunCommand}"/>
-            <MenuItem Header="Stop" Command="{Binding StopCommand}"/>
+            <MenuItem Header="Tools">
+                <MenuItem Header="FullScreen" Command="{Binding FullscreenCommand}"/>
+                <MenuItem Header="RecordCommand" Command="{Binding StartRecordCommand}"/>
+            </MenuItem>
+            
+            <MenuItem Margin="250 0 10 0" Height="20" Width="20" Command="{Binding RunCommand}">
+                <MenuItem.Style>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type MenuItem}">
+                                    <Grid>
+                                        <Image Source="/startbtn.png" Stretch="Fill"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
+            <MenuItem Header="Stop" Height="20" Width="20" Command="{Binding StopCommand}">
+                <MenuItem.Style>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type MenuItem}">
+                                    <Grid>
+                                        <Image Source="/stop.png" Stretch="Fill"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
         </Menu>
 
 
@@ -52,7 +82,7 @@
         </WindowsFormsHost>
 
 
-        <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}" FontStyle="Normal" FontFamily="Consolas" FontSize="14"/>
+        <TextBlock Grid.Row="2" Text="{Binding ErrorText, Mode=OneWay}" FontStyle="Normal" FontFamily="Consolas" FontSize="14" Foreground="Red"/>
 
         <dt:CustomDynamicTab x:Name="DynamicTab" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" 
                              TextChangedRichTextBoxEvent="DynamicTab_TextChangedRichTextBoxEvent"
