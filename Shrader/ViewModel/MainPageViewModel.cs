@@ -66,6 +66,10 @@ namespace Shrader.IDE.ViewModel
         /// </summary>
         public ICommand SaveCommand { get; set; }
         /// <summary>
+        /// Save project command
+        /// </summary>
+        public ICommand SavePrjCommand { get; set; }
+        /// <summary>
         /// Open settings window command
         /// </summary>
         public ICommand OpenSettingsCommand { get; set; }
@@ -177,12 +181,12 @@ namespace Shrader.IDE.ViewModel
                 }
             });
 
-            SaveCommand = new RelayCommand((obj) =>
+            SavePrjCommand = new RelayCommand((obj) =>
             {
                 var dialog = new SaveFileDialog
                 {
-                    DefaultExt = ".shaderproj",
-                    Filter = "(*.SHADERPROJ)|*.SHADERPROJ"
+                    DefaultExt = ".shadeproj",
+                    Filter = "(*.SHADEPROJ)|*.SHADEPROJ"
                 };
                 if (dialog.ShowDialog() == true)
                 {

@@ -23,7 +23,7 @@ namespace Shrader.IDE.Compilation
 			using (var fileStream = new StreamReader(file.OpenRead()))
 			{
 				string code = fileStream.ReadToEnd();
-				var result = Main.Matches(code);
+				var result = Include.Matches(code);
 
 				foreach (var link in result)
 					LincRec((link as Match).Groups[1].Value, level + 1, links);
@@ -44,7 +44,7 @@ namespace Shrader.IDE.Compilation
 					{
 						using (var streamReader = new StreamReader(pair.Key))
 						{
-							fileWriter.WriteLine(Main.Replace(streamReader.ReadToEnd(), ""));
+							fileWriter.WriteLine(Include.Replace(streamReader.ReadToEnd(), ""));
 						}
 					}
 				}

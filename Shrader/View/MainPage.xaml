@@ -36,7 +36,7 @@
                     <MenuItem Header="Existing" Command="{Binding AddExistFileCommand}"/>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Save" Command="{Binding SaveCommand}"/>
+            <MenuItem Header="Save" Command="{Binding SavePrjCommand}"/>
             <MenuItem Header="Start" Command="{Binding RunCommand}"/>
             <MenuItem Header="Stop" Command="{Binding StopCommand}"/>
             <MenuItem Header="Pause" Click="MenuItem_PauseClick"/>
