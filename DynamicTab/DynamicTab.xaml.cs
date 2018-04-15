@@ -92,7 +92,6 @@ namespace DynamicTab
 		private void Rtb_GotFocus(object sender, EventArgs e)
 		{
 			var rtb = sender as System.Windows.Forms.RichTextBox;
-			rtb.Update();
 			rtb.LoadHighlightinngs();
 			rtb.GotFocus -= Rtb_GotFocus;
 		}

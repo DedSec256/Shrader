@@ -65,22 +65,45 @@ namespace ShaderBuilder
                 GL.BindTexture(TextureTarget.Texture2D, id);
                 
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+
+	            GL.ActiveTexture(TextureUnit.Texture0 + id);
+	            GL.BindTexture(TextureTarget.Texture2D, id);
+
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
                 // GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 0);
 
                 Bitmap bmp = new Bitmap(filename);
                 BitmapData bmp_data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
+	            GL.ActiveTexture(TextureUnit.Texture0 + id);
+	            GL.BindTexture(TextureTarget.Texture2D, id);
+
+				GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp_data.Width, bmp_data.Height, 0,
                     OpenTK.Graphics.OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, bmp_data.Scan0);
                 GL.BindTexture(TextureTarget.Texture2D, id);
 
-                bmp.UnlockBits(bmp_data);
+	            GL.ActiveTexture(TextureUnit.Texture0 + id);
+	            GL.BindTexture(TextureTarget.Texture2D, id);
+
+				bmp.UnlockBits(bmp_data);
 
                 return id;
-            }
+				/*uniform sampler2D iTexture; 
 
-            public Uniforms(SettingModel model, int program)
+out vec4 fragColor; 
+
+vec2 fragCoord = gl_FragCoord.xy; 
+
+void main() 
+{ 
+// vec4 color = vec4(texture2D(iTexture, fragCoord).xyz, 0); 
+
+vec4 color = vec4(fragCoord.xy / 1000.0, 0.5, 0); 
+fragColor = color; 
+}*/
+			}
+
+			public Uniforms(SettingModel model, int program)
             {
                 if (model.IsMouse)
                     UniformMouse = GL.GetUniformLocation(program, UNIFORM_MOUSE);
@@ -91,7 +114,7 @@ namespace ShaderBuilder
                 if (model.IsViewPort)
                     UniformDisplay = GL.GetUniformLocation(program, UNIFORM_DISPLAY);
 
-                if (model.ImagesPath == null || model.ImagesPath.Count() == 0)
+                if (model.ImagesPath == null || !model.ImagesPath.Any())
                     return;
 
                 string name = model.ImagesPath.First();
@@ -156,9 +179,8 @@ namespace ShaderBuilder
                 return -1;
             }
 
-            GL.VertexAttribPointer(a_Position, 2, VertexAttribPointerType.Float, false, 0, 0);
-
             GL.EnableVertexAttribArray(a_Position);
+			GL.VertexAttribPointer(a_Position, 2, VertexAttribPointerType.Float, false, 0, 0);
             return vertices.Length / 2;
         }
 

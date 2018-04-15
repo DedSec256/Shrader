@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Accord.Video.FFMPEG;
+using OpenTK;
 
 namespace Shrader.IDE.Tools.VideoSaver
 {
@@ -57,6 +58,11 @@ namespace Shrader.IDE.Tools.VideoSaver
 			var bitmap = new Bitmap(returnImage);
 
 			return bitmap;
+		}
+
+		public static void StartRecord(GLControl control)
+		{
+			
 		}
 
 		/// <summary>
