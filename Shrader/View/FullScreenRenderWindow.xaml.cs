@@ -34,7 +34,7 @@ namespace Shrader.IDE.View
 
         #region Render part
 
-        private const int TICK_PERIOD = 10;
+        private const int TICK_PERIOD = 5;
 
         private void WindowsFormsHost_Initialized(object sender, EventArgs e)
         {

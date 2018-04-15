@@ -211,6 +211,7 @@
     <None Include="Samples\Packman\defines.glsl" />
     <None Include="Samples\Packman\main.glsl" />
     <None Include="Samples\Packman\pacproj.shadeproj" />
+    <None Include="Samples\Spectrum\main.glsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

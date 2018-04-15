@@ -47,6 +47,11 @@ namespace DynamicTab.SyntaxHighlighter
 				{
 					using (var fileStream = new StreamWriter(filename))
 					{
+						var res = GenerateDefault();
+						foreach (var key in res)
+						{
+							Keywords.Add(key.Keyword, key);
+						}
 						fileStream.WriteLine(JsonConvert.SerializeObject(GenerateDefault()));
 					}
 				}
@@ -83,7 +88,7 @@ namespace DynamicTab.SyntaxHighlighter
 				new SyntaxKeyword(){ Keyword = States.Comment.ToString(), Color = Color.FromArgb(255, 0, 120, 0)},
 				new SyntaxKeyword(){ Keyword = States.Symbol.ToString(), Color = Color.FromArgb(255, 100, 100, 120)},
 				new SyntaxKeyword(){ Keyword = States.Digit.ToString(), Color = Color.FromArgb(255, 0, 100, 200)},
-				new SyntaxKeyword(){ Keyword = States.Preprocessor.ToString(), Color = Color.FromArgb(255, 10, 50, 40)},
+				new SyntaxKeyword(){ Keyword = States.Preprocessor.ToString(), Color = Color.FromArgb(255, 100, 50, 30)},
 				new SyntaxKeyword(){ Keyword = States.Text.ToString(), Color = Color.FromArgb(255, 200, 40, 50)}
 			};
 

@@ -5,7 +5,7 @@ uniform vec4 iMouse;
 out vec4 fragColor;
 vec2 fragCoord = gl_FragCoord.xy; 
 
-#include "C:\Users\Vasch\Source\Repos\HackShaders\Shrader\Samples\Packman\defines.glsl"
+#include "D:\Programming\Shrader\Shrader\Samples\Packman\defines.glsl"
 
 float glowCounter;
 
