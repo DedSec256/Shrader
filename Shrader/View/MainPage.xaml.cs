@@ -78,13 +78,6 @@ namespace Shrader.IDE.View
         {
             StaticShaderBuilder.Paint(RenderCanvas);
         }
-
-
-        private void MenuItem_PauseClick(object sender, RoutedEventArgs e)
-        {
-            timer?.Stop();
-        }
-
         #endregion
     }
 }
