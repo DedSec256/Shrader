@@ -187,6 +187,7 @@ namespace Shrader.IDE.ViewModel
                     var name = dialog.FileName;
                     using (StreamWriter sr = new StreamWriter(name))
                     {
+                        sr.WriteLine(StaticShaderLinker.FindMain(GetTabFilesPath()));
                         sr.WriteLine(SettingModel.IsTime);
                         sr.WriteLine(SettingModel.IsMouse);
                         sr.WriteLine(SettingModel.IsViewPort);
