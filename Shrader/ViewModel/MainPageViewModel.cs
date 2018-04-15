@@ -244,20 +244,48 @@ namespace Shrader.IDE.ViewModel
                 RenderCanvas.Invalidate();
                 RenderCanvas.MakeCurrent();
             });
-			/*
-	        StartRecordCommand = new RelayCommand((obj) => new Action<GLControl>((gl) =>
+			
+	        StartRecordCommand = new RelayCommand((obj) =>
 	        {
-		        
-	        }));*/
+		        var dialog = new SaveFileDialog
+		        {
+			        Filter = "Movie(*.MP4) | *.MP4",
+					AddExtension = true
+		        };
+		        if (dialog.ShowDialog() == true)
+		        {
+			        StopCommand.Execute(null);
+			        RenderCanvas.Enabled = false;
+
+			        var full = new FullScreenRenderWindow(() =>
+			        {
+				        RunCommand.Execute(null);
+			        });
+
+			        full.RenderCanvas.Paint -= full.RenderCanvas_Paint;
+					full.RenderCanvas.Paint += (sender, args) =>
+			        {
+				        StaticShaderBuilder.Paint(full.RenderCanvas);
+						VideoShaderRecorder.GrabScreenshot(full.RenderCanvas);
+					};
+			        VideoShaderRecorder.StartRecord(dialog.FileName, 15000);
+					full.ShowDialog();
+			        VideoShaderRecorder.StopRecord();
+
+					RenderCanvas.Enabled = true;
+			        RenderCanvas.Invalidate();
+			        RenderCanvas.MakeCurrent();
+				}
+	        });
         }
 
 
 
-        #endregion
+		#endregion
 
-        #region Help methods
+		#region Help methods
 
-        private void FilledTab(TabItem tab, string name)
+		private void FilledTab(TabItem tab, string name)
         {
             var rtb = (tab.Content as WindowsFormsHost).Child as System.Windows.Forms.RichTextBox;
             using (var file = File.Open(name, FileMode.Open))
@@ -271,7 +299,7 @@ namespace Shrader.IDE.ViewModel
 
         private TabItem AddToTabItems(string name)
         {
-            if (TabItems.FirstOrDefault(t => t.Name == Path.GetFileNameWithoutExtension(name)) != null) return null;
+            if (TabItems.FirstOrDefault(t => t.Header.ToString() == name) != null) return null;
             var tab = CreateTabItem(name);
             TabItems.Add(tab);
             return tab;

@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using Accord.Video.FFMPEG;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using Timer = System.Timers.Timer;
 
 namespace Shrader.IDE.Tools.VideoSaver
 {
 	static class VideoShaderRecorder
 	{
 		private static List<Bitmap> Images;
-		private const int MaxShots = 100;
-		private static bool isRecord = false;
-		public static bool IsRecording => isRecord;
+		private static Timer Timer;
+		public static bool IsRecording { get; private set; }
 		private static string Filename;
 
 		static VideoShaderRecorder()
@@ -24,26 +25,51 @@ namespace Shrader.IDE.Tools.VideoSaver
 			Images = new List<Bitmap>();
 		}
 
-		public static void StartRecord(string filename)
+		public static void StartRecord(string filename, double interval)
 		{
-			if (isRecord) return;
-			Images = new List<Bitmap>();
-			isRecord = true;
+			Images = new List<Bitmap>(500);
+			IsRecording = true;
 			Filename = filename;
+
+			Timer = new Timer(interval);
+			Timer.Elapsed += Timer_Elapsed;
+			Timer.Start();
+		}
+
+		private static void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			StopRecord();
 		}
 
 		public static void StopRecord()
 		{
-			isRecord = false;
-		}
-		public static bool AddImage(Bitmap bitmap)
-		{
-			if (isRecord && Images.Count <= MaxShots)
+			if (IsRecording)
 			{
-				Images.Add(bitmap);
-				return true;
+				Timer.Stop();
+				Timer.Dispose();
+				IsRecording = false;
+				Thread.Sleep(100);
+				Task.Run(() =>
+				{
+					CreateMovie(Filename);
+				});
 			}
-			return false;
+			IsRecording = false;
+		}
+
+		public static void GrabScreenshot(GLControl control)
+		{
+			if (!IsRecording) return;
+
+			Bitmap bmp = new Bitmap(control.ClientSize.Width, control.ClientSize.Height);
+			System.Drawing.Imaging.BitmapData data =
+				bmp.LockBits(control.ClientRectangle, System.Drawing.Imaging.ImageLockMode.WriteOnly,
+					System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+			GL.ReadPixels(0, 0, control.ClientSize.Width, control.ClientSize.Height, PixelFormat.Bgr, PixelType.UnsignedByte,
+				data.Scan0);
+			bmp.UnlockBits(data);
+			bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+			if (IsRecording) Images.Add(bmp);
 		}
 
 		/// <summary>
@@ -58,11 +84,6 @@ namespace Shrader.IDE.Tools.VideoSaver
 			var bitmap = new Bitmap(returnImage);
 
 			return bitmap;
-		}
-
-		public static void StartRecord(GLControl control)
-		{
-			
 		}
 
 		/// <summary>
@@ -87,9 +108,9 @@ namespace Shrader.IDE.Tools.VideoSaver
 		public static void CreateMovie(string path)
 		{
 
-			int width = 480;
-			int height = 320;
-			var framRate = 200;
+			int width = 720;
+			int height = 480;
+			var framRate = 25;
 
 			using (var vFWriter = new VideoFileWriter())
 			{
