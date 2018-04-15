@@ -12,7 +12,7 @@
                 <TabControl.Resources>
                     <DataTemplate x:Key="TabHeader" DataType="TabItem">
                         <DockPanel>
-                            <Button Name="btnDelete" DockPanel.Dock="Right" Margin="5,0,0,0" Padding="0" Height="2" Width="25" Background="x:None" Click="BtnDelete_Click" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Path=Name}">
+                            <Button Name="btnDelete" DockPanel.Dock="Right" Margin="5,0,0,0" Padding="0" Height="2" Width="25" Click="BtnDelete_Click" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Path=Name}">
                                 <Image Source="C:\Users\User\source\repos\Shrader\DynamicTab\slider.png" Height="5" Width="11" Stretch="Fill"></Image>
                             </Button>
                             <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=TabItem }, Path=Header}" FontSize="18" />
