@@ -44,7 +44,7 @@ namespace Shrader.IDE.View
 
         #region Render part
 
-        private const int TICK_PERIOD = 25;
+        private const int TICK_PERIOD = 5;
 
         private void WindowsFormsHost_Initialized(object sender, EventArgs e)
         {
@@ -64,14 +64,14 @@ namespace Shrader.IDE.View
         private static object lockToken = new object();
         private void Timer_Tick(object sender, EventArgs e)
         {
-            lock (lockToken)
-            {
-                if (isExecute == true)
-                    return;
-            }
-            isExecute = true;
+            ////lock (lockToken)
+            ////{
+            //    if (isExecute == true)
+            //        return;
+            //}
+            //isExecute = true;
             RenderCanvas.Invalidate();
-            isExecute = false;
+            //isExecute = false;
         }
 
         private void RenderCanvas_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
